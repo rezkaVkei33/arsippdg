@@ -3,7 +3,7 @@
 
         <a class="navbar-brand d-flex align-items-center gap-2" href="<?= site_url('dashboard'); ?>">
             <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" width="40">
-            <span class="fw-semibold">Kancut Terbang Surat PDG</span>
+            <span class="fw-semibold">Arsip Surat PDG</span>
         </a>
 
         <!-- TOGGLER -->
