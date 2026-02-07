@@ -2,9 +2,6 @@
 <script src="<?= base_url('assets/bootstrap/custom/js_base.js'); ?>"></script>
 <script src="<?= base_url('assets/sweetalert/sweetalert2.all.min.js'); ?>"></script>
 
-  <!-- Bootstrap 5 JS CDN -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <!-- SweetAlert2 CDN -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
