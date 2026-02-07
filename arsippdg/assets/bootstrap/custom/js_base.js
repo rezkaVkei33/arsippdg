@@ -108,3 +108,12 @@
                 menu.style.zIndex = '1060';
             });
         });
+
+document.querySelectorAll('.navbar-nav a:not(.dropdown-toggle)').forEach(el => {
+    el.addEventListener('click', () => {
+        const nav = document.querySelector('.navbar-collapse');
+        if (nav.classList.contains('show')) {
+            bootstrap.Collapse.getInstance(nav)?.hide();
+        }
+    });
+});
