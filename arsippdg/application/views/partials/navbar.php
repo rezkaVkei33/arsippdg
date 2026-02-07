@@ -20,7 +20,8 @@
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('dashboard'); ?>">Dashboard</a>
+                    <i class="bi bi-card-list"></i> 
+                        Daftar Surat Masuk
                 </li>
 
                 <li class="nav-item dropdown">
@@ -29,11 +30,18 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        data-bs-auto-close="false">
+                       <i class="fas fa-envelope"></i>
                         Surat Masuk
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= site_url('suratmasuk'); ?>">Daftar</a></li>
-                        <li><a class="dropdown-item" href="<?= site_url('suratmasuk/add'); ?>">Tambah</a></li>
+                        <li>
+                            <a class="dropdown-item" 
+                            href="<?= site_url('suratmasuk'); ?>">
+                            <i class="bi bi-card-list"></i> Daftar Surat Masuk</a>
+                        </li>
+                        <li><a class="dropdown-item" 
+                        href="<?= site_url('suratmasuk/add'); ?>">
+                        <i class="bi bi-plus-circle"></i> Tambah Surat Masuk</a></li>
                     </ul>
                 </li>
 
@@ -43,11 +51,18 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        data-bs-auto-close="false">
+                       <i class="fas fa-paper-plane"></i>
                         Surat Keluar
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= site_url('suratkeluar'); ?>">Daftar</a></li>
-                        <li><a class="dropdown-item" href="<?= site_url('suratkeluar/create'); ?>">Tambah</a></li>
+                        <li><a class="dropdown-item" 
+                        href="<?= site_url('suratkeluar'); ?>">
+                        <i class="bi bi-card-list"></i> 
+                        Daftar Surat Keluar</a></li>
+                        <li><a class="dropdown-item" 
+                        href="<?= site_url('suratkeluar/create'); ?>">
+                        <i class="bi bi-plus-circle"></i> 
+                        Tambah Surat Keluar</a></li>
                     </ul>
                 </li>
 
@@ -57,23 +72,37 @@
                        role="button"
                        data-bs-toggle="dropdown"
                        data-bs-auto-close="false">
-                        Arsip
+                       <i class="bi bi-folder2-open"></i>
+                       Arsip
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="<?= site_url('arsip/masuk'); ?>">Arsip Masuk</a></li>
-                        <li><a class="dropdown-item" href="<?= site_url('arsip/keluar'); ?>">Arsip Keluar</a></li>
+                        <li><a class="dropdown-item" 
+                        href="<?= site_url('arsip/masuk'); ?>">
+                        <i class="bi bi-inbox"></i>
+                        Arsip Masuk</a></li>
+                        <li><a class="dropdown-item" 
+                        href="<?= site_url('arsip/keluar'); ?>"><i class="bi bi-send"></i> 
+                        <i class="bi bi-box-seam"></i>
+                        Arsip Keluar</a></li>
                     </ul>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown">
-                        <?= $this->session->userdata('username'); ?>
+                <li class="nav-item dropdown ms-2">
+                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> <?= $this->session->userdata('username'); ?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item text-danger" href="<?= site_url('auth/logout'); ?>">Logout</a></li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="bi bi-person"></i> <?= $this->session->userdata('username'); ?>
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="<?= site_url('auth/logout'); ?>">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
