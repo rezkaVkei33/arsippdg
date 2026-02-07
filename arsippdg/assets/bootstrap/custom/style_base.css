@@ -57,7 +57,9 @@
 
         /* ===== MOBILE / TABLET FIX ===== */
         @media (max-width: 991px) {
-
+            .navbar {
+                transform: translateY(0) !important;
+            }
             .navbar-collapse {
                 background: linear-gradient(135deg, #2c3e50, #1a2530);
                 padding: 1rem;
