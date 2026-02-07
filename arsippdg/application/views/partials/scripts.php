@@ -46,6 +46,27 @@
             confirmButtonColor: '#0d6efd'
         });
     <?php endif; ?>
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+    const dropdownToggles = document.querySelectorAll('.navbar .dropdown-toggle');
+
+    dropdownToggles.forEach(toggle => {
+        toggle.addEventListener('click', function (e) {
+
+            const currentDropdown = this.closest('.dropdown');
+            const currentMenu = currentDropdown.querySelector('.dropdown-menu');
+
+            // Tutup semua dropdown lain
+            document.querySelectorAll('.navbar .dropdown-menu.show').forEach(menu => {
+                if (menu !== currentMenu) {
+                    bootstrap.Dropdown.getInstance(menu.previousElementSibling)?.hide();
+                }
+            });
+        });
+    });
+
+});
 </script>
 
 </body>
