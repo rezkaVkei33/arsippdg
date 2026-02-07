@@ -19,7 +19,7 @@
         }
 
         body {
-            padding-top: 0; /* tinggi navbar */
+            padding-top: 76px; /* tinggi navbar */
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
             overflow-x: hidden;
@@ -36,8 +36,6 @@
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
             padding: 0.8rem 0;
-            position: fixed;
-            top: 0;
             left: 0;
             right: 0;
             width: 100%;
@@ -105,15 +103,16 @@
             position: relative;
         }
 
-        .dropdown-menu.show {
+        /*.dropdown-menu.show {
             top: 100%;
-            z-index: 1060; /* lebih tinggi dari navbar */
+            z-index: 1060; 
             display: block;
             position: absolute !important;
             inset: 0px auto auto 0px;
             margin: 0px;
             transform: translate(0px, 38px);
         }
+        */
 
         .dropdown-item {
             padding: 0.75rem 1.5rem;
@@ -433,6 +432,9 @@
         }
 
         @media (max-width: 768px) {
+            .dropdown-menu {
+                position: static !important;
+            }
             .hero-section {
                 padding: 80px 0 40px;
                 min-height: calc(100vh - 70px);
