@@ -40,13 +40,16 @@ document.addEventListener('DOMContentLoaded', function () {
        DESKTOP ONLY !!!
     ========================= */
     const navbar = document.querySelector('.navbar');
-    let lastScroll = 0;
 
     function isDesktop() {
         return window.innerWidth >= 992;
     }
 
     window.addEventListener('scroll', function () {
+        if (!navbar) {
+            return;
+        }
+
         if (!isDesktop()) {
             navbar.style.transform = 'translateY(0)';
             return;
@@ -57,19 +60,12 @@ document.addEventListener('DOMContentLoaded', function () {
         if (currentScroll > 100) {
             navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,.15)';
             navbar.style.padding = '0.5rem 0';
-
-            if (currentScroll > lastScroll && currentScroll > 200) {
-                navbar.style.transform = 'translateY(-100%)';
-            } else {
-                navbar.style.transform = 'translateY(0)';
-            }
+            navbar.style.transform = 'translateY(0)';
         } else {
             navbar.style.boxShadow = '0 4px 6px rgba(0,0,0,.1)';
             navbar.style.padding = '0.8rem 0';
             navbar.style.transform = 'translateY(0)';
         }
-
-        lastScroll = currentScroll;
     });
 
 

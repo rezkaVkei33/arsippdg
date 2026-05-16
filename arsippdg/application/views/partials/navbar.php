@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="<?= site_url('dashboard'); ?>">
             <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" width="40">
