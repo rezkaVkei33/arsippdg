@@ -75,53 +75,6 @@ class Auth extends CI_Controller {
         redirect('dashboard');
     }
 
-    // Halaman Register
-    public function register()
-    {
-        // Jika sudah login, redirect ke dashboard
-        if ($this->session->userdata('logged_in')) {
-            redirect('dashboard');
-        }
-
-        $data = [
-            'title'    => 'Register - Arsip Surat PDG',
-            'subtitle' => 'Buat Akun Baru'
-        ];
-
-        $this->load->view('auth/register', $data);
-    }
-
-    // Process Register
-    public function do_register()
-    {
-        // Validasi form
-        $this->form_validation->set_rules('username', 'Username', 'required|min_length[5]|is_unique[users.username]');
-        $this->form_validation->set_rules('password', 'Password', 'required|min_length[8]');
-        $this->form_validation->set_rules('confirm_password', 'Konfirmasi Password', 'required|matches[password]');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->session->set_flashdata('error', validation_errors());
-            redirect('auth/register');
-        }
-
-        // Prepare data
-        $data = [
-            'username'  => $this->input->post('username'),
-            'password'  => password_hash($this->input->post('password'), PASSWORD_DEFAULT),
-            'created_at'    => date('Y-m-d H:i:s')
-        ];
-
-        // Insert user
-        if ($this->auth_model->insert($data)) {
-            $this->session->set_flashdata('success', 'Akun berhasil dibuat! Silakan login.');
-            log_message('info', 'User ' . $data['username'] . ' berhasil melakukan registrasi');
-            redirect('auth/login');
-        } else {
-            $this->session->set_flashdata('error', 'Gagal membuat akun. Silakan coba lagi.');
-            redirect('auth/register');
-        }
-    }
-
     // Logout
     public function logout()
     {

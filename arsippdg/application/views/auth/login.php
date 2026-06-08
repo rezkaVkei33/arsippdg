@@ -45,10 +45,6 @@
                         <span>Arsip terorganisir rapi</span>
                     </div>
                     <div class="feature-item">
-                        <i class="bi bi-clock-history"></i>
-                        <span>24/7 Akses fleksibel</span>
-                    </div>
-                    <div class="feature-item">
                         <i class="bi bi-search"></i>
                         <span>Pencarian cepat dan mudah</span>
                     </div>
@@ -148,13 +144,6 @@
 
                 <?= form_close() ?>
 
-                <!-- Register Link -->
-                <div class="register-link">
-                    <p class="mb-0">
-                        Belum punya akun? 
-                        <a href="<?= base_url('auth/register') ?>">Daftar di sini</a>
-                    </p>
-                </div>
             </div>
         </div>
     </div>

@@ -7,8 +7,6 @@ $route['translate_uri_dashes'] = FALSE;
 // ========== AUTH ROUTES ==========
 $route['auth/login']          = 'auth/login';
 $route['auth/do_login']       = 'auth/do_login';
-$route['auth/register']       = 'auth/register';
-$route['auth/do_register']    = 'auth/do_register';
 $route['auth/logout']         = 'auth/logout';
 $route['auth/(:any)']         = 'auth/$1';
 
