@@ -21,6 +21,11 @@ $route['dashboard']           = 'dashboard/index';
 // ========== SISTEM NILAI ROUTES ==========
 $route['sistem-nilai']                                      = 'sistem_nilai/NilaiDashboard/index';
 $route['sistem-nilai/master-data/program-studi']            = 'sistem_nilai/MasterData/program_studi';
+$route['sistem-nilai/master-data/program-studi/tambah']     = 'sistem_nilai/MasterData/program_studi_create';
+$route['sistem-nilai/master-data/program-studi/simpan']     = 'sistem_nilai/MasterData/program_studi_store';
+$route['sistem-nilai/master-data/program-studi/ubah/(:num)'] = 'sistem_nilai/MasterData/program_studi_edit/$1';
+$route['sistem-nilai/master-data/program-studi/perbarui/(:num)'] = 'sistem_nilai/MasterData/program_studi_update/$1';
+$route['sistem-nilai/master-data/program-studi/hapus/(:num)'] = 'sistem_nilai/MasterData/program_studi_delete/$1';
 $route['sistem-nilai/master-data/mahasiswa']                = 'sistem_nilai/MasterData/mahasiswa';
 $route['sistem-nilai/master-data/tahun-akademik']           = 'sistem_nilai/MasterData/tahun_akademik';
 $route['sistem-nilai/master-data/mata-kuliah']              = 'sistem_nilai/MasterData/mata_kuliah';
@@ -76,4 +81,3 @@ $route['catatan/hapus/(:num)'] = 'Catatan/delete/$1';
 // route google 
 $route['google/login']    = 'google/login';
 $route['google/callback'] = 'google/callback';
-
