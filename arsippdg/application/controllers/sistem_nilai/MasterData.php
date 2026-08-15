@@ -17,7 +17,7 @@ class MasterData extends SistemNilai_Controller
 
     public function program_studi()
     {
-        $keyword = trim($this->input->get('q', TRUE));
+        $keyword = trim((string) $this->input->get('q', TRUE));
 
         $this->render('program_studi/index', [
             'title' => 'Program Studi - Sistem Nilai',
