@@ -17,7 +17,24 @@ $route['logout']              = 'auth/logout';
 
 // ========== DASHBOARD ROUTE ==========
 $route['dashboard']           = 'dashboard/index';
-$route['sistem-nilai']        = 'SistemNilai/index';
+
+// ========== SISTEM NILAI ROUTES ==========
+$route['sistem-nilai']                                      = 'sistem_nilai/NilaiDashboard/index';
+$route['sistem-nilai/master-data/program-studi']            = 'sistem_nilai/MasterData/program_studi';
+$route['sistem-nilai/master-data/mahasiswa']                = 'sistem_nilai/MasterData/mahasiswa';
+$route['sistem-nilai/master-data/tahun-akademik']           = 'sistem_nilai/MasterData/tahun_akademik';
+$route['sistem-nilai/master-data/mata-kuliah']              = 'sistem_nilai/MasterData/mata_kuliah';
+$route['sistem-nilai/master-data/penawaran-mata-kuliah']    = 'sistem_nilai/MasterData/penawaran_mata_kuliah';
+$route['sistem-nilai/penilaian/upload-nilai']               = 'sistem_nilai/Penilaian/upload_nilai';
+$route['sistem-nilai/penilaian/daftar-nilai']               = 'sistem_nilai/Penilaian/daftar_nilai';
+$route['sistem-nilai/akademik/khs']                         = 'sistem_nilai/Akademik/khs';
+$route['sistem-nilai/akademik/ips']                         = 'sistem_nilai/Akademik/ips';
+$route['sistem-nilai/akademik/ipk']                         = 'sistem_nilai/Akademik/ipk';
+$route['sistem-nilai/akademik/transkrip-nilai']             = 'sistem_nilai/Akademik/transkrip_nilai';
+$route['sistem-nilai/laporan/rekap-mahasiswa']              = 'sistem_nilai/Laporan/rekap_mahasiswa';
+$route['sistem-nilai/laporan/rekap-nilai']                  = 'sistem_nilai/Laporan/rekap_nilai';
+$route['sistem-nilai/laporan/rekap-mata-kuliah']            = 'sistem_nilai/Laporan/rekap_mata_kuliah';
+$route['sistem-nilai/pengaturan/grade']                     = 'sistem_nilai/Pengaturan/grade';
 
 // ========== USER MANAGEMENT ROUTES ==========
 $route['users']               = 'Users/index';
@@ -59,5 +76,4 @@ $route['catatan/hapus/(:num)'] = 'Catatan/delete/$1';
 // route google 
 $route['google/login']    = 'google/login';
 $route['google/callback'] = 'google/callback';
-
 

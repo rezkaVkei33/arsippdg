@@ -1,8 +1,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="<?= site_url(has_role('master_akun') ? 'users' : (has_role('sistem_nilai') ? 'sistem-nilai' : 'dashboard')); ?>">
+        <a class="navbar-brand" href="<?= site_url(has_role('master_akun') ? 'users' : 'dashboard'); ?>">
             <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" width="40">
-            <span><?= has_role('master_akun') ? 'Akun Master PDG' : (has_role('sistem_nilai') ? 'Sistem Nilai PDG' : 'Arsip Surat PDG'); ?></span>
+            <span><?= has_role('master_akun') ? 'Akun Master PDG' : 'Arsip Surat PDG'; ?></span>
         </a>
 
         <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -49,12 +49,6 @@
                 <li class="nav-item">
                     <a class="nav-link" href="<?= site_url('users'); ?>">
                         <i class="bi bi-people"></i> Pengguna
-                    </a>
-                </li>
-                <?php elseif (has_role('sistem_nilai')): ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('sistem-nilai'); ?>">
-                        <i class="bi bi-house-door"></i> Dashboard Nilai
                     </a>
                 </li>
                 <?php elseif (has_role('master_akun')): ?>
