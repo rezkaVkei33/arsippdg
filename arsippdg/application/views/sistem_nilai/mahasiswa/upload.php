@@ -14,8 +14,20 @@
                 <div class="form-text">Format file yang direncanakan: .xlsx atau .xls.</div>
             </div>
             <div class="mb-4">
-                <label for="keterangan" class="form-label">3. Keterangan</label>
-                <textarea id="keterangan" name="keterangan" class="form-control" rows="4" placeholder="Tambahkan keterangan upload bila diperlukan."></textarea>
+                <label class="form-label">3. Keterangan</label>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered mb-0">
+                        <thead class="table-light"><tr><th>Kolom</th><th>Keterangan</th><th>Wajib</th></tr></thead>
+                        <tbody>
+                            <tr><td>nim</td><td>NIM mahasiswa, harus unik</td><td>Ya</td></tr>
+                            <tr><td>nama</td><td>Nama lengkap mahasiswa</td><td>Ya</td></tr>
+                            <tr><td>jenis_kelamin</td><td><code>L</code> atau <code>P</code></td><td>Tidak</td></tr>
+                            <tr><td>kode_prodi</td><td>Kode program studi yang telah terdaftar</td><td>Tidak</td></tr>
+                            <tr><td>angkatan</td><td>Tahun empat digit, contoh <code>2026</code></td><td>Tidak</td></tr>
+                            <tr><td>status</td><td>Aktif, Cuti, Lulus, Nonaktif, atau Drop Out</td><td>Ya</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <button type="button" class="btn btn-success" disabled><i class="bi bi-upload"></i> Import Excel (belum aktif)</button><a href="<?= site_url('sistem-nilai/master-data/mahasiswa'); ?>" class="btn btn-outline-secondary">Kembali</a>
         </form>
