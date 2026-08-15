@@ -13,7 +13,7 @@ class Auth extends CI_Controller {
     // Halaman Login
     public function login()
     {
-        // Jika sudah login, redirect ke dashboard
+        // Jika sudah login, redirect ke dashboard sesuai role.
         if ($this->session->userdata('logged_in')) {
             redirect('dashboard');
         }
@@ -38,7 +38,7 @@ class Auth extends CI_Controller {
             redirect('auth/login');
         }
 
-        $username = $this->input->post('username');
+        $username = trim($this->input->post('username', TRUE));
         $password = $this->input->post('password');
 
         // Cek user
@@ -55,11 +55,19 @@ class Auth extends CI_Controller {
             redirect('auth/login');
         }
 
-        // Set session
+        if (!in_array($user->role, ['arsip_surat', 'sistem_nilai', 'master_akun'], TRUE)) {
+            log_message('error', 'User ' . $username . ' memiliki role tidak valid');
+            $this->session->set_flashdata('error', 'Role akun tidak valid. Hubungi administrator');
+            redirect('auth/login');
+        }
+
+        // Set session. Kolom role wajib ada pada tabel users.
+        $this->session->sess_regenerate(TRUE);
         $session_data = [
             'logged_in'  => TRUE,
             'user_id'    => $user->id,
-            'username'   => $user->username
+            'username'   => $user->username,
+            'role'       => $user->role
         ];
 
         $this->session->set_userdata($session_data);

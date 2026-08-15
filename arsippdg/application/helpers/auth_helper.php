@@ -26,7 +26,32 @@ if (!function_exists('is_admin')) {
     function is_admin()
     {
         $CI = &get_instance();
-        return $CI->session->userdata('role') === 'admin';
+        return $CI->session->userdata('role') === 'arsip_surat';
+    }
+}
+
+/** Check whether the current user has one of the supplied roles. */
+if (!function_exists('has_role')) {
+    function has_role($roles)
+    {
+        $CI = &get_instance();
+        return in_array($CI->session->userdata('role'), (array) $roles, TRUE);
+    }
+}
+
+/** Human-readable role label for navigation and pages. */
+if (!function_exists('role_label')) {
+    function role_label($role = NULL)
+    {
+        $CI = &get_instance();
+        $role = $role ?: $CI->session->userdata('role');
+        $labels = [
+            'arsip_surat' => 'Admin Arsip Surat',
+            'sistem_nilai' => 'Admin Sistem Nilai',
+            'master_akun' => 'Master Akun'
+        ];
+
+        return isset($labels[$role]) ? $labels[$role] : 'Pengguna';
     }
 }
 
@@ -94,8 +119,36 @@ if (!function_exists('require_login')) {
         if (!is_logged_in()) {
             $CI = &get_instance();
             $CI->session->set_flashdata('error', 'Anda harus login terlebih dahulu');
-            show_error('Akses Ditolak - Silakan Login Terlebih Dahulu', 403);
+            redirect('auth/login');
         }
+    }
+}
+
+/** Restrict a page to one or more roles. */
+if (!function_exists('require_role')) {
+    function require_role($roles)
+    {
+        require_login();
+
+        if (!has_role($roles)) {
+            $CI = &get_instance();
+            $CI->session->set_flashdata('error', 'Anda tidak memiliki akses ke halaman tersebut');
+            redirect('dashboard');
+        }
+    }
+}
+
+if (!function_exists('require_arsip_surat')) {
+    function require_arsip_surat()
+    {
+        require_role('arsip_surat');
+    }
+}
+
+if (!function_exists('require_master_akun')) {
+    function require_master_akun()
+    {
+        require_role('master_akun');
     }
 }
 
@@ -106,13 +159,7 @@ if (!function_exists('require_login')) {
 if (!function_exists('require_admin')) {
     function require_admin()
     {
-        require_login();
-        
-        if (!is_admin()) {
-            $CI = &get_instance();
-            $CI->session->set_flashdata('error', 'Anda tidak memiliki akses');
-            redirect('dashboard');
-        }
+        require_arsip_surat();
     }
 }
 

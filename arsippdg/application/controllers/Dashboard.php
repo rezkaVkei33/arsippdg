@@ -12,6 +12,14 @@ class Dashboard extends CI_Controller {
 
 	public function index()
 	{
+		if (has_role('master_akun')) {
+			redirect('users');
+		}
+
+		if (has_role('sistem_nilai')) {
+			redirect('sistem-nilai');
+		}
+
 		$user_id = $this->session->userdata('user_id');
 		
 		$data = [

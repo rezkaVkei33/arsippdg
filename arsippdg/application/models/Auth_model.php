@@ -44,13 +44,18 @@ class Auth_model extends CI_Model {
     // Get all users
     public function get_all()
     {
-        return $this->db->get($this->table_users)->result();
+        return $this->db->order_by('created_at', 'DESC')->get($this->table_users)->result();
     }
 
     // Count users
     public function count_all()
     {
         return $this->db->count_all($this->table_users);
+    }
+
+    public function count_by_role($role)
+    {
+        return $this->db->where('role', $role)->count_all_results($this->table_users);
     }
 
     // ========== LOGIN ACTIVITY METHODS ==========

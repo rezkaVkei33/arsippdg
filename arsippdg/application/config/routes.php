@@ -17,6 +17,13 @@ $route['logout']              = 'auth/logout';
 
 // ========== DASHBOARD ROUTE ==========
 $route['dashboard']           = 'dashboard/index';
+$route['sistem-nilai']        = 'SistemNilai/index';
+
+// ========== USER MANAGEMENT ROUTES ==========
+$route['users']               = 'Users/index';
+$route['users/create']        = 'Users/create';
+$route['users/edit/(:num)']   = 'Users/edit/$1';
+$route['users/delete/(:num)'] = 'Users/delete/$1';
 
 // ========== SURAT MASUK ROUTES ==========
 // route surat masuk 
@@ -52,6 +59,5 @@ $route['catatan/hapus/(:num)'] = 'Catatan/delete/$1';
 // route google 
 $route['google/login']    = 'google/login';
 $route['google/callback'] = 'google/callback';
-
 
 

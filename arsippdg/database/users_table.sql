@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL UNIQUE,
   `password` varchar(255) NOT NULL,
+  `role` enum('arsip_surat','sistem_nilai','master_akun') NOT NULL DEFAULT 'arsip_surat',
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `username` (`username`)
@@ -28,5 +29,5 @@ CREATE TABLE IF NOT EXISTS `login_activity` (
 -- Username: admin
 -- Password: admin123456
 -- Uncomment the line below to insert default user
--- INSERT INTO `users` (`username`, `password`) 
--- VALUES ('admin', '$2y$10$8JW7GrzWJQU4EKZ1GvnH2uR7.E5wEtOvlKy8pZq5hQ6tZ3KzL2nOe');
+-- INSERT INTO `users` (`username`, `password`, `role`)
+-- VALUES ('admin_arsip', '$2y$10$8JW7GrzWJQU4EKZ1GvnH2uR7.E5wEtOvlKy8pZq5hQ6tZ3KzL2nOe', 'arsip_surat');

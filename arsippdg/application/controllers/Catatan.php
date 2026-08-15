@@ -6,7 +6,7 @@ class Catatan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        require_login();
+        require_arsip_surat();
         $this->load->model('Catatan_model', 'catatan');
         $this->load->library(['pagination', 'session']);
         $this->load->helper('url');

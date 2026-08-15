@@ -4,7 +4,7 @@ class Arsip extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        require_login();
+        require_arsip_surat();
         $this->load->model('Arsip_model', 'arsip');
         $this->load->library(['pagination', 'session']);
         $this->load->helper(['url', 'form']);
