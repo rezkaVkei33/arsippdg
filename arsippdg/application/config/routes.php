@@ -33,9 +33,14 @@ $route['sistem-nilai/master-data/mahasiswa/ubah/(:num)']    = 'sistem_nilai/Maha
 $route['sistem-nilai/master-data/mahasiswa/perbarui/(:num)'] = 'sistem_nilai/Mahasiswa/update/$1';
 $route['sistem-nilai/master-data/mahasiswa/hapus/(:num)']   = 'sistem_nilai/Mahasiswa/delete/$1';
 $route['sistem-nilai/master-data/mahasiswa/upload']         = 'sistem_nilai/Mahasiswa/upload';
-$route['sistem-nilai/master-data/tahun-akademik']           = 'sistem_nilai/MasterData/tahun_akademik';
-$route['sistem-nilai/master-data/mata-kuliah']              = 'sistem_nilai/MasterData/mata_kuliah';
-$route['sistem-nilai/master-data/penawaran-mata-kuliah']    = 'sistem_nilai/MasterData/penawaran_mata_kuliah';
+foreach (['tahun-akademik', 'mata-kuliah', 'penawaran-mata-kuliah'] as $master_route) {
+    $route['sistem-nilai/master-data/' . $master_route] = 'sistem_nilai/AkademikMaster/' . str_replace('-', '_', $master_route);
+    $route['sistem-nilai/master-data/' . $master_route . '/tambah'] = 'sistem_nilai/AkademikMaster/create/' . $master_route;
+    $route['sistem-nilai/master-data/' . $master_route . '/simpan'] = 'sistem_nilai/AkademikMaster/store/' . $master_route;
+    $route['sistem-nilai/master-data/' . $master_route . '/ubah/(:num)'] = 'sistem_nilai/AkademikMaster/edit/' . $master_route . '/$1';
+    $route['sistem-nilai/master-data/' . $master_route . '/perbarui/(:num)'] = 'sistem_nilai/AkademikMaster/update/' . $master_route . '/$1';
+    $route['sistem-nilai/master-data/' . $master_route . '/hapus/(:num)'] = 'sistem_nilai/AkademikMaster/delete/' . $master_route . '/$1';
+}
 $route['sistem-nilai/penilaian/upload-nilai']               = 'sistem_nilai/Penilaian/upload_nilai';
 $route['sistem-nilai/penilaian/daftar-nilai']               = 'sistem_nilai/Penilaian/daftar_nilai';
 $route['sistem-nilai/akademik/khs']                         = 'sistem_nilai/Akademik/khs';
