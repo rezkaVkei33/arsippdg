@@ -1,23 +1,26 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class ProgramStudi_model extends CI_Model
+class Mahasiswa_model extends CI_Model
 {
-    private $table = 'ak_program_studi';
+    private $table = 'ak_mahasiswa';
 
     public function get_all($keyword = NULL)
     {
+        $this->db
+            ->select('ak_mahasiswa.*, ak_program_studi.kode_prodi, ak_program_studi.nama_prodi')
+            ->from($this->table)
+            ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'left');
+
         if ($keyword !== NULL && $keyword !== '') {
             $this->db->group_start()
-                ->like('kode_prodi', $keyword)
-                ->or_like('nama_prodi', $keyword)
+                ->like('ak_mahasiswa.nim', $keyword)
+                ->or_like('ak_mahasiswa.nama', $keyword)
+                ->or_like('ak_program_studi.nama_prodi', $keyword)
             ->group_end();
         }
 
-        return $this->db
-            ->order_by('nama_prodi', 'ASC')
-            ->get($this->table)
-            ->result();
+        return $this->db->order_by('ak_mahasiswa.nama', 'ASC')->get()->result();
     }
 
     public function get_by_id($id)
@@ -25,19 +28,9 @@ class ProgramStudi_model extends CI_Model
         return $this->db->where('id', (int) $id)->get($this->table)->row();
     }
 
-    public function get_active()
+    public function nim_exists($nim, $except_id = NULL)
     {
-        return $this->db
-            ->where('status', 'Aktif')
-            ->order_by('nama_prodi', 'ASC')
-            ->get($this->table)
-            ->result();
-    }
-
-    public function kode_exists($kode_prodi, $except_id = NULL)
-    {
-        $this->db->where('kode_prodi', $kode_prodi);
-
+        $this->db->where('nim', $nim);
         if ($except_id !== NULL) {
             $this->db->where('id !=', (int) $except_id);
         }
