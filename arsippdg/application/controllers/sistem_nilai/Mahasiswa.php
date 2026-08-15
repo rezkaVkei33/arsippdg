@@ -14,6 +14,7 @@ class Mahasiswa extends SistemNilai_Controller
         $this->load->model('sistem_nilai/Mahasiswa_model', 'mahasiswa_model');
         $this->load->model('sistem_nilai/ProgramStudi_model', 'program_studi_model');
         $this->load->library('form_validation');
+        $this->load->library('mahasiswa_excel');
     }
 
     public function index()
@@ -84,6 +85,63 @@ class Mahasiswa extends SistemNilai_Controller
     public function upload()
     {
         $this->render('mahasiswa/upload', ['title' => 'Upload Mahasiswa - Sistem Nilai']);
+    }
+
+    public function download_template()
+    {
+        $this->mahasiswa_excel->download_template();
+    }
+
+    public function import_excel()
+    {
+        $this->require_post();
+        if (empty($_FILES['file_excel']['name']) || $_FILES['file_excel']['error'] !== UPLOAD_ERR_OK) {
+            $this->session->set_flashdata('error', 'Pilih file Excel terlebih dahulu');
+            redirect('sistem-nilai/master-data/mahasiswa/upload');
+        }
+
+        $extension = strtolower(pathinfo($_FILES['file_excel']['name'], PATHINFO_EXTENSION));
+        if (!in_array($extension, ['xlsx', 'xls'], TRUE)) {
+            $this->session->set_flashdata('error', 'File harus berformat .xlsx atau .xls');
+            redirect('sistem-nilai/master-data/mahasiswa/upload');
+        }
+
+        try {
+            $result = $this->mahasiswa_excel->read($_FILES['file_excel']['tmp_name']);
+        } catch (Exception $exception) {
+            $this->session->set_flashdata('error', 'File Excel tidak dapat dibaca');
+            redirect('sistem-nilai/master-data/mahasiswa/upload');
+        }
+        if ($result['error']) {
+            $this->session->set_flashdata('error', $result['error']);
+            redirect('sistem-nilai/master-data/mahasiswa/upload');
+        }
+
+        $prodi = [];
+        foreach ($this->program_studi_model->get_all() as $item) $prodi[strtoupper($item->kode_prodi)] = $item->id;
+        $valid_status = ['aktif' => 'Aktif', 'cuti' => 'Cuti', 'lulus' => 'Lulus', 'nonaktif' => 'Nonaktif', 'drop out' => 'Drop Out'];
+        $errors = []; $data = []; $nims = [];
+        foreach ($result['rows'] as $row_number => $row) {
+            $nim = trim($row['nim']); $nama = trim($row['nama']); $gender = strtoupper(trim($row['jenis_kelamin']));
+            $kode_prodi = strtoupper(trim($row['kode_prodi'])); $angkatan = trim($row['angkatan']); $status_key = strtolower(trim($row['status']));
+            $row_errors = [];
+            if ($nim === '') $row_errors[] = 'NIM wajib diisi';
+            elseif ($this->mahasiswa_model->nim_exists($nim) || isset($nims[$nim])) $row_errors[] = 'NIM sudah terdaftar';
+            if ($nama === '') $row_errors[] = 'nama wajib diisi';
+            if ($gender !== '' && !in_array($gender, $this->jenis_kelamin, TRUE)) $row_errors[] = 'jenis_kelamin harus L atau P';
+            if ($kode_prodi !== '' && !isset($prodi[$kode_prodi])) $row_errors[] = 'kode_prodi tidak ditemukan';
+            if ($angkatan !== '' && !preg_match('/^[0-9]{4}$/', $angkatan)) $row_errors[] = 'angkatan harus 4 digit';
+            if (!isset($valid_status[$status_key])) $row_errors[] = 'status tidak valid';
+            if ($row_errors) { $errors[] = 'Baris ' . $row_number . ': ' . implode(', ', $row_errors); continue; }
+            $nims[$nim] = TRUE;
+            $data[] = ['nim'=>$nim, 'nama'=>$nama, 'jenis_kelamin'=>$gender ?: NULL, 'program_studi_id'=>$kode_prodi === '' ? NULL : $prodi[$kode_prodi], 'angkatan'=>$angkatan ?: NULL, 'status'=>$valid_status[$status_key]];
+        }
+        if (!$data && !$errors) $errors[] = 'File tidak memiliki data mahasiswa.';
+        if ($errors) { $this->session->set_flashdata('error', 'Impor dibatalkan. Perbaiki data pada file.'); $this->session->set_flashdata('import_errors', $errors); redirect('sistem-nilai/master-data/mahasiswa/upload'); }
+        $this->db->trans_start(); foreach ($data as $item) $this->mahasiswa_model->insert($item); $this->db->trans_complete();
+        if (!$this->db->trans_status()) { $this->session->set_flashdata('error', 'Impor gagal disimpan ke database'); redirect('sistem-nilai/master-data/mahasiswa/upload'); }
+        $this->session->set_flashdata('success', count($data) . ' data mahasiswa berhasil diimpor');
+        redirect('sistem-nilai/master-data/mahasiswa');
     }
 
     private function set_rules($is_create)

@@ -33,6 +33,8 @@ $route['sistem-nilai/master-data/mahasiswa/ubah/(:num)']    = 'sistem_nilai/Maha
 $route['sistem-nilai/master-data/mahasiswa/perbarui/(:num)'] = 'sistem_nilai/Mahasiswa/update/$1';
 $route['sistem-nilai/master-data/mahasiswa/hapus/(:num)']   = 'sistem_nilai/Mahasiswa/delete/$1';
 $route['sistem-nilai/master-data/mahasiswa/upload']         = 'sistem_nilai/Mahasiswa/upload';
+$route['sistem-nilai/master-data/mahasiswa/template']       = 'sistem_nilai/Mahasiswa/download_template';
+$route['sistem-nilai/master-data/mahasiswa/import']         = 'sistem_nilai/Mahasiswa/import_excel';
 foreach (['tahun-akademik', 'mata-kuliah', 'penawaran-mata-kuliah'] as $master_route) {
     $route['sistem-nilai/master-data/' . $master_route] = 'sistem_nilai/AkademikMaster/' . str_replace('-', '_', $master_route);
     $route['sistem-nilai/master-data/' . $master_route . '/tambah'] = 'sistem_nilai/AkademikMaster/create/' . $master_route;
