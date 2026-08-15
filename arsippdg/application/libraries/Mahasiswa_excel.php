@@ -12,7 +12,12 @@ class Mahasiswa_excel
 
     public function __construct()
     {
-        require_once FCPATH . 'vendor/autoload.php';
+        $manualAutoload = APPPATH . 'third_party/phpoffice/autoload.php';
+        if (file_exists($manualAutoload)) {
+            require_once $manualAutoload;
+        } else {
+            require_once FCPATH . 'vendor/autoload.php';
+        }
     }
 
     public function download_template()
