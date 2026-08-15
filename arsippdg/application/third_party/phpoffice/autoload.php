@@ -5,6 +5,7 @@ $phpOfficeBase = __DIR__;
 $autoloaders = [
     'PhpOffice\\PhpSpreadsheet\\' => $phpOfficeBase . '/phpspreadsheet/src/PhpSpreadsheet/',
     'Psr\\SimpleCache\\' => $phpOfficeBase . '/psr/simple-cache/src/',
+    'Composer\\Pcre\\' => $phpOfficeBase . '/composer-pcre/src/',
     'Complex\\' => $phpOfficeBase . '/complex/classes/src/',
     'Matrix\\' => $phpOfficeBase . '/matrix/classes/src/',
     'ZipStream\\' => $phpOfficeBase . '/zipstream/src/',
