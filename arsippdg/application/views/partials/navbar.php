@@ -46,11 +46,6 @@
                         <li><a class="dropdown-item" href="<?= site_url('catatan'); ?>"><i class="bi bi-file-earmark-text"></i> Catatan</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('users'); ?>">
-                        <i class="bi bi-people"></i> Pengguna
-                    </a>
-                </li>
                 <?php elseif (has_role('master_akun')): ?>
                 <li class="nav-item">
                     <a class="nav-link" href="<?= site_url('users'); ?>">
