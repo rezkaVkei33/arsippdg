@@ -28,7 +28,7 @@
                         <td><?= date('d-m-Y H:i', strtotime($item->updated_at)); ?></td>
                         <td class="text-end">
                             <a href="<?= site_url('sistem-nilai/master-data/program-studi/ubah/' . $item->id); ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i> Ubah</a>
-                            <form method="post" action="<?= site_url('sistem-nilai/master-data/program-studi/hapus/' . $item->id); ?>" class="d-inline" onsubmit="return confirm('Hapus program studi ini?');"><button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button></form>
+                            <form method="post" action="<?= site_url('sistem-nilai/master-data/program-studi/hapus/' . $item->id); ?>" class="d-inline delete-form" data-delete-confirm="Program studi <?= html_escape($item->nama_prodi); ?> akan dihapus. Data terkait juga akan ikut terhapus."><button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button></form>
                         </td>
                     </tr>
                     <?php endforeach; ?>

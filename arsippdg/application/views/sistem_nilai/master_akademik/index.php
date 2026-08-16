@@ -78,7 +78,7 @@
                                     <?php endif; ?>
                                     <td class="text-end">
                                         <a class="btn btn-sm btn-outline-primary" href="<?= site_url('sistem-nilai/master-data/'.$type.'/ubah/'.$i->id); ?>">Ubah</a>
-                                        <form class="d-inline" method="post" action="<?= site_url('sistem-nilai/master-data/'.$type.'/hapus/'.$i->id); ?>" onsubmit="return confirm('Hapus data ini?');">
+                                        <form class="d-inline delete-form" method="post" action="<?= site_url('sistem-nilai/master-data/'.$type.'/hapus/'.$i->id); ?>" data-delete-confirm="Data <?= strtolower(html_escape($label)); ?> ini akan dihapus. Jika ada data terkait, data tersebut juga akan ikut terhapus.">
                                             <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
                                         </form>
                                     </td>

@@ -48,25 +48,44 @@
     <?php endif; ?>
 
     document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('form.delete-form').forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
 
-    const dropdownToggles = document.querySelectorAll('.navbar .dropdown-toggle');
+                const message = form.dataset.deleteConfirm || 'Data yang terkait juga akan ikut terhapus. Yakin ingin melanjutkan?';
 
-    dropdownToggles.forEach(toggle => {
-        toggle.addEventListener('click', function (e) {
+                Swal.fire({
+                    title: 'Konfirmasi Hapus',
+                    text: message,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, hapus',
+                    cancelButtonText: 'Batal',
+                    reverseButtons: true,
+                    confirmButtonColor: '#dc3545'
+                }).then(function (result) {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
 
-            const currentDropdown = this.closest('.dropdown');
-            const currentMenu = currentDropdown.querySelector('.dropdown-menu');
+        const dropdownToggles = document.querySelectorAll('.navbar .dropdown-toggle');
 
-            // Tutup semua dropdown lain
-            document.querySelectorAll('.navbar .dropdown-menu.show').forEach(menu => {
-                if (menu !== currentMenu) {
-                    bootstrap.Dropdown.getInstance(menu.previousElementSibling)?.hide();
-                }
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function (e) {
+                const currentDropdown = this.closest('.dropdown');
+                const currentMenu = currentDropdown.querySelector('.dropdown-menu');
+
+                document.querySelectorAll('.navbar .dropdown-menu.show').forEach(menu => {
+                    if (menu !== currentMenu) {
+                        bootstrap.Dropdown.getInstance(menu.previousElementSibling)?.hide();
+                    }
+                });
             });
         });
     });
-
-});
 </script>
 
 </body>

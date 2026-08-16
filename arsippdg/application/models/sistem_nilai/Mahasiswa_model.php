@@ -74,6 +74,13 @@ class Mahasiswa_model extends CI_Model
 
     public function delete($id)
     {
-        return $this->db->where('id', (int) $id)->delete($this->table);
+        $this->db->trans_start();
+
+        $this->db->where('mahasiswa_id', (int) $id)->delete('ak_nilai');
+        $this->db->where('id', (int) $id)->delete($this->table);
+
+        $this->db->trans_complete();
+
+        return $this->db->trans_status();
     }
 }

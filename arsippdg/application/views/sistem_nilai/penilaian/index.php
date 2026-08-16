@@ -63,7 +63,7 @@
                                     <td><?= html_escape($item->bobot !== NULL ? number_format((float) $item->bobot, 2, ',', '.') : '-'); ?></td>
                                     <td class="text-end">
                                         <a href="<?= site_url('sistem-nilai/penilaian/ubah/' . $item->id); ?>" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i> Ubah</a>
-                                        <form method="post" action="<?= site_url('sistem-nilai/penilaian/hapus/' . $item->id); ?>" class="d-inline" onsubmit="return confirm('Hapus data nilai ini?');">
+                                        <form method="post" action="<?= site_url('sistem-nilai/penilaian/hapus/' . $item->id); ?>" class="d-inline delete-form" data-delete-confirm="Data nilai mahasiswa <?= html_escape($item->nama); ?> akan dihapus. Data terkait juga akan ikut terhapus.">
                                             <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i> Hapus</button>
                                         </form>
                                     </td>

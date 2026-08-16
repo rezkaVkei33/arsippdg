@@ -26,7 +26,7 @@
                         <td class="text-end">
                             <a class="btn btn-sm btn-outline-primary" href="<?= site_url('users/edit/' . $user->id); ?>"><i class="bi bi-pencil"></i> Ubah</a>
                             <?php if ((int) $user->id !== (int) current_user_id()): ?>
-                            <form action="<?= site_url('users/delete/' . $user->id); ?>" method="post" class="d-inline" onsubmit="return confirm('Hapus pengguna ini?');">
+                            <form action="<?= site_url('users/delete/' . $user->id); ?>" method="post" class="d-inline delete-form" data-delete-confirm="Akun pengguna <?= html_escape($user->username); ?> akan dihapus. Data terkait juga akan ikut terhapus.">
                                 <button class="btn btn-sm btn-outline-danger" type="submit"><i class="bi bi-trash"></i> Hapus</button>
                             </form>
                             <?php endif; ?>
