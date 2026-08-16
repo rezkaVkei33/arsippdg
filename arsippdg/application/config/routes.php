@@ -44,7 +44,12 @@ foreach (['tahun-akademik', 'mata-kuliah', 'penawaran-mata-kuliah'] as $master_r
     $route['sistem-nilai/master-data/' . $master_route . '/hapus/(:num)'] = 'sistem_nilai/AkademikMaster/delete/' . $master_route . '/$1';
 }
 $route['sistem-nilai/penilaian/upload-nilai']               = 'sistem_nilai/Penilaian/upload_nilai';
+$route['sistem-nilai/penilaian/download-template']          = 'sistem_nilai/Penilaian/download_template';
+$route['sistem-nilai/penilaian/import-nilai']               = 'sistem_nilai/Penilaian/import_excel';
 $route['sistem-nilai/penilaian/daftar-nilai']               = 'sistem_nilai/Penilaian/daftar_nilai';
+$route['sistem-nilai/penilaian/ubah/(:num)']                = 'sistem_nilai/Penilaian/edit/$1';
+$route['sistem-nilai/penilaian/perbarui/(:num)']            = 'sistem_nilai/Penilaian/update/$1';
+$route['sistem-nilai/penilaian/hapus/(:num)']               = 'sistem_nilai/Penilaian/delete/$1';
 $route['sistem-nilai/akademik/khs']                         = 'sistem_nilai/Akademik/khs';
 $route['sistem-nilai/akademik/ips']                         = 'sistem_nilai/Akademik/ips';
 $route['sistem-nilai/akademik/ipk']                         = 'sistem_nilai/Akademik/ipk';
