@@ -152,7 +152,7 @@ class Akademik extends SistemNilai_Controller
         $updated = $this->akademik_model->get_latest_khs_update($mahasiswa_id, $tahun_akademik_id);
         $tanggal_update = !empty($updated->updated_at) ? date('d F Y', strtotime($updated->updated_at)) : date('d F Y');
 
-        $html = $this->load->view('akademik/pdf_khs', [
+        $html = $this->load->view('sistem_nilai/akademik/pdf_khs', [
             'mahasiswa' => $mahasiswa,
             'tahun_akademik' => $tahun,
             'khs' => $khs_rows,
