@@ -1,0 +1,80 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Akademik_model extends CI_Model
+{
+    public function get_riwayat_akademik($tahun_id = NULL, $semester = NULL)
+    {
+        $this->db
+            ->select('ta.id, ta.tahun, ta.semester, COALESCE(SUM(mk.sks), 0) AS total_sks')
+            ->from('ak_tahun_akademik ta')
+            ->join('ak_penawaran_mk pm', 'pm.tahun_akademik_id = ta.id', 'left')
+            ->join('ak_mata_kuliah mk', 'mk.id = pm.mata_kuliah_id', 'left')
+            ->group_by('ta.id, ta.tahun, ta.semester')
+            ->order_by('ta.tahun', 'DESC')
+            ->order_by('ta.semester', 'ASC');
+
+        if ($tahun_id !== NULL && $tahun_id !== '') {
+            $this->db->where('ta.id', (int) $tahun_id);
+        }
+
+        if ($semester !== NULL && $semester !== '') {
+            $this->db->where('ta.semester', (int) $semester);
+        }
+
+        return $this->db->get()->result();
+    }
+
+    public function get_tahun_akademik_by_id($id)
+    {
+        return $this->db->where('id', (int) $id)->get('ak_tahun_akademik')->row();
+    }
+
+    public function get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL)
+    {
+        $this->db
+            ->select('DISTINCT m.id, m.nim, m.nama, p.nama_prodi')
+            ->from('ak_nilai n')
+            ->join('ak_mahasiswa m', 'm.id = n.mahasiswa_id', 'left')
+            ->join('ak_program_studi p', 'p.id = m.program_studi_id', 'left')
+            ->join('ak_penawaran_mk pm', 'pm.id = n.penawaran_mk_id', 'left')
+            ->join('ak_tahun_akademik ta', 'ta.id = pm.tahun_akademik_id', 'left')
+            ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id)
+            ->order_by('m.nama', 'ASC');
+
+        if ($semester !== NULL && $semester !== '') {
+            $this->db->where('ta.semester', (int) $semester);
+        }
+
+        return $this->db->get()->result();
+    }
+
+    public function get_mahasiswa_detail($id)
+    {
+        return $this->db
+            ->select('m.*, p.nama_prodi')
+            ->from('ak_mahasiswa m')
+            ->join('ak_program_studi p', 'p.id = m.program_studi_id', 'left')
+            ->where('m.id', (int) $id)
+            ->get()->row();
+    }
+
+    public function get_khs_by_mahasiswa($mahasiswa_id, $tahun_akademik_id, $semester = NULL)
+    {
+        $this->db
+            ->select('mk.kode_mk, mk.nama_mk, mk.sks, n.nilai_huruf, n.bobot AS nilai_angka, (mk.sks * n.bobot) AS nilai_mutu')
+            ->from('ak_nilai n')
+            ->join('ak_penawaran_mk pm', 'pm.id = n.penawaran_mk_id', 'left')
+            ->join('ak_mata_kuliah mk', 'mk.id = pm.mata_kuliah_id', 'left')
+            ->join('ak_tahun_akademik ta', 'ta.id = pm.tahun_akademik_id', 'left')
+            ->where('n.mahasiswa_id', (int) $mahasiswa_id)
+            ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id)
+            ->order_by('mk.kode_mk', 'ASC');
+
+        if ($semester !== NULL && $semester !== '') {
+            $this->db->where('ta.semester', (int) $semester);
+        }
+
+        return $this->db->get()->result();
+    }
+}
