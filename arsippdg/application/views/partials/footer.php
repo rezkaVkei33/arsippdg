@@ -1,6 +1,6 @@
-<footer class="footer footer-visible mt-5" id="footer">
+<footer class="footer footer-visible mt-5" id="mainFooter">
     <div class="container text-center">
-        <span>
+        <span class="copyright">
             &copy; <?= date('Y'); ?> Arsip Surat PDG —
             <strong>Rezka Apriyandi</strong>
         </span>
