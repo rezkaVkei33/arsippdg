@@ -24,7 +24,7 @@ class Akademik extends SistemNilai_Controller
             'selected_tahun_id' => $tahun_id,
             'selected_semester' => $semester,
             'tahun_akademik_options' => $this->db->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(),
-            'semester_options' => ['1' => 'Semester 1', '2' => 'Semester 2', '3' => 'Semester 3', '4' => 'Semester 4', '5' => 'Semester 5', '6' => 'Semester 6', '7' => 'Semester 7', '8' => 'Semester 8']
+            'semester_options' => ['Ganjil' => 'Ganjil', 'Genap' => 'Genap']
         ];
 
         $this->render('akademik/khs_index', $data);

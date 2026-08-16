@@ -33,7 +33,8 @@ class Akademik_model extends CI_Model
     public function get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL)
     {
         $this->db
-            ->select('DISTINCT m.id, m.nim, m.nama, p.nama_prodi')
+            ->distinct()
+            ->select('m.id, m.nim, m.nama, p.nama_prodi')
             ->from('ak_nilai n')
             ->join('ak_mahasiswa m', 'm.id = n.mahasiswa_id', 'left')
             ->join('ak_program_studi p', 'p.id = m.program_studi_id', 'left')
@@ -42,8 +43,8 @@ class Akademik_model extends CI_Model
             ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id)
             ->order_by('m.nama', 'ASC');
 
-        if ($semester !== NULL && $semester !== '') {
-            $this->db->where('ta.semester', (int) $semester);
+        if ($semester !== NULL && $semester !== '' && $semester !== '0') {
+            $this->db->where('ta.semester', $semester);
         }
 
         return $this->db->get()->result();
@@ -71,8 +72,8 @@ class Akademik_model extends CI_Model
             ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id)
             ->order_by('mk.kode_mk', 'ASC');
 
-        if ($semester !== NULL && $semester !== '') {
-            $this->db->where('ta.semester', (int) $semester);
+        if ($semester !== NULL && $semester !== '' && $semester !== '0') {
+            $this->db->where('ta.semester', $semester);
         }
 
         return $this->db->get()->result();

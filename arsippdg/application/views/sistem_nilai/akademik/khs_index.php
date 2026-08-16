@@ -51,7 +51,7 @@
                                     <td><?= html_escape($row->semester ?: '-'); ?></td>
                                     <td><?= html_escape((string) round((float) $row->total_sks, 2)); ?></td>
                                     <td class="text-center">
-                                        <a href="<?= site_url('sistem-nilai/akademik/riwayat-mahasiswa?tahun_id=' . (int) $row->id . '&semester=' . (int) $row->semester); ?>" class="btn btn-sm btn-outline-primary">
+                                        <a href="<?= site_url('sistem-nilai/akademik/riwayat-mahasiswa?tahun_id=' . (int) $row->id . '&semester=' . urlencode((string) $row->semester)); ?>" class="btn btn-sm btn-outline-primary">
                                             <i class="bi bi-eye"></i> Lihat
                                         </a>
                                     </td>
