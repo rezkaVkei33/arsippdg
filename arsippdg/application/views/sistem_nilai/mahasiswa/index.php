@@ -28,10 +28,11 @@
             </tr><?php endforeach; ?><?php endif; ?></tbody>
         </table></div>
 
-        <?php if ($this->pagination->create_links()): ?>
+        <?php $pagination_links = $this->pagination->create_links(); ?>
+        <?php if ($pagination_links !== ''): ?>
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
                 <small class="text-muted">Menampilkan <?= count($mahasiswa); ?> dari <?= $total_rows; ?> data</small>
-                <?= $this->pagination->create_links(); ?>
+                <?= $pagination_links; ?>
             </div>
         <?php endif; ?>
     </div></div>

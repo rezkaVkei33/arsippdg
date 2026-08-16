@@ -145,9 +145,12 @@
      </div>
 
     <!-- PAGINATION -->
-    <nav>
-        <?= $this->pagination->create_links(); ?>
-    </nav>
+    <?php $pagination_links = $this->pagination->create_links(); ?>
+    <?php if ($pagination_links !== ''): ?>
+        <nav>
+            <?= $pagination_links; ?>
+        </nav>
+    <?php endif; ?>
 
 </div>
 </section>
