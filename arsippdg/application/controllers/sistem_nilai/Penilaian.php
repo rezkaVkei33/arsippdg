@@ -18,7 +18,7 @@ class Penilaian extends SistemNilai_Controller
     {
         $selected_prodi = (int) $this->input->get('prodi', TRUE);
         $selected_tahun = (int) $this->input->get('tahun_akademik', TRUE);
-        $selected_semester = trim((string) $this->input->get('semester', TRUE));
+        $selected_semester = $this->normalize_semester($this->input->get('semester', TRUE));
         $selected_angkatan = trim((string) $this->input->get('angkatan', TRUE));
 
         $this->render('penilaian/upload', [
@@ -27,7 +27,7 @@ class Penilaian extends SistemNilai_Controller
             'program_studi_options' => $this->program_studi_model->get_all(),
             'tahun_akademik_options' => $this->master_model->tahun_akademik(),
             'mata_kuliah_options' => $this->master_model->mata_kuliah(),
-            'semester_options' => ['Ganjil', 'Genap'],
+            'semester_options' => ['1' => 'Ganjil', '2' => 'Genap'],
             'selected_prodi' => $selected_prodi,
             'selected_tahun' => $selected_tahun,
             'selected_semester' => $selected_semester,
@@ -38,9 +38,9 @@ class Penilaian extends SistemNilai_Controller
 
     public function download_template()
     {
-        $program_studi_id = (int) $this->input->get('prodi', TRUE);
-        $tahun_akademik_id = (int) $this->input->get('tahun_akademik', TRUE);
-        $semester = trim((string) $this->input->get('semester', TRUE));
+        $program_studi_id = (int) ($this->input->get('prodi', TRUE) ?: $this->input->get('program_studi_id', TRUE));
+        $tahun_akademik_id = (int) ($this->input->get('tahun_akademik', TRUE) ?: $this->input->get('tahun_akademik_id', TRUE));
+        $semester = $this->normalize_semester($this->input->get('semester', TRUE));
         $angkatan = trim((string) $this->input->get('angkatan', TRUE));
 
         if ($program_studi_id <= 0 || $tahun_akademik_id <= 0 || $semester === '' || $angkatan === '') {
@@ -268,6 +268,25 @@ class Penilaian extends SistemNilai_Controller
         $this->penilaian_model->delete($id);
         $this->session->set_flashdata('success', 'Data nilai berhasil dihapus');
         redirect('sistem-nilai/penilaian/daftar-nilai');
+    }
+
+    private function normalize_semester($semester)
+    {
+        $semester = trim((string) $semester);
+        if ($semester === '') {
+            return '';
+        }
+
+        $semester = strtolower($semester);
+        if (in_array($semester, ['1', 'ganjil'], TRUE)) {
+            return '1';
+        }
+
+        if (in_array($semester, ['2', 'genap'], TRUE)) {
+            return '2';
+        }
+
+        return (string) (int) $semester;
     }
 
     private function get_or_404($id)

@@ -41,8 +41,8 @@
                         <label for="semester" class="form-label">Semester</label>
                         <select name="semester" id="semester" class="form-select" required>
                             <option value="">Pilih Semester</option>
-                            <?php foreach ($semester_options as $option): ?>
-                                <option value="<?= $option === 'Ganjil' ? '1' : '2'; ?>"><?= html_escape($option); ?></option>
+                            <?php foreach ($semester_options as $value => $label): ?>
+                                <option value="<?= html_escape((string) $value); ?>" <?= isset($selected_semester) && (string) $selected_semester === (string) $value ? 'selected' : ''; ?>><?= html_escape($label); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -111,12 +111,16 @@
 
         function buildDownloadUrl() {
             const params = new URLSearchParams();
-            for (const field of fields) {
-                const value = document.getElementById(field)?.value || '';
-                if (value) {
-                    params.set(field === 'tahun_akademik_id' ? 'tahun_akademik' : field, value);
-                }
-            }
+            const prodi = document.getElementById('program_studi_id')?.value || '';
+            const tahunAkademik = document.getElementById('tahun_akademik_id')?.value || '';
+            const semester = document.getElementById('semester')?.value || '';
+            const angkatan = document.getElementById('angkatan')?.value || '';
+
+            if (prodi) params.set('prodi', prodi);
+            if (tahunAkademik) params.set('tahun_akademik', tahunAkademik);
+            if (semester) params.set('semester', semester);
+            if (angkatan) params.set('angkatan', angkatan);
+
             const base = '<?= site_url('sistem-nilai/penilaian/download-template'); ?>';
             return params.toString() ? base + '?' + params.toString() : base;
         }
