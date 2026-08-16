@@ -13,17 +13,59 @@ class Mahasiswa extends SistemNilai_Controller
         parent::__construct();
         $this->load->model('sistem_nilai/Mahasiswa_model', 'mahasiswa_model');
         $this->load->model('sistem_nilai/ProgramStudi_model', 'program_studi_model');
-        $this->load->library('form_validation');
+        $this->load->library(['form_validation', 'pagination']);
         $this->load->library('mahasiswa_excel');
     }
 
     public function index()
     {
         $keyword = trim((string) $this->input->get('q', TRUE));
+        $selected_prodi = trim((string) $this->input->get('prodi', TRUE));
+        $page = max(1, (int) $this->input->get('page', TRUE));
+        $per_page = 10;
+        $total_rows = $this->mahasiswa_model->count_all($keyword, $selected_prodi);
+
+        $config = [
+            'base_url' => site_url('sistem-nilai/master-data/mahasiswa'),
+            'total_rows' => $total_rows,
+            'per_page' => $per_page,
+            'use_page_numbers' => TRUE,
+            'page_query_string' => TRUE,
+            'query_string_segment' => 'page',
+            'reuse_query_string' => TRUE,
+            'full_tag_open' => '<nav aria-label="Pagination"><ul class="pagination pagination-sm justify-content-center mb-0">',
+            'full_tag_close' => '</ul></nav>',
+            'first_link' => 'Awal',
+            'last_link' => 'Akhir',
+            'next_link' => '›',
+            'prev_link' => '‹',
+            'num_tag_open' => '<li class="page-item"><span class="page-link">',
+            'num_tag_close' => '</span></li>',
+            'cur_tag_open' => '<li class="page-item active"><span class="page-link">',
+            'cur_tag_close' => '</span></li>',
+            'next_tag_open' => '<li class="page-item"><span class="page-link">',
+            'next_tag_close' => '</span></li>',
+            'prev_tag_open' => '<li class="page-item"><span class="page-link">',
+            'prev_tag_close' => '</span></li>',
+            'first_tag_open' => '<li class="page-item"><span class="page-link">',
+            'first_tag_close' => '</span></li>',
+            'last_tag_open' => '<li class="page-item"><span class="page-link">',
+            'last_tag_close' => '</span></li>'
+        ];
+        $this->pagination->initialize($config);
+
+        $offset = ($page - 1) * $per_page;
+
         $this->render('mahasiswa/index', [
             'title' => 'Mahasiswa - Sistem Nilai',
-            'mahasiswa' => $this->mahasiswa_model->get_all($keyword),
-            'keyword' => $keyword
+            'mahasiswa' => $this->mahasiswa_model->get_all($keyword, $selected_prodi, $per_page, $offset),
+            'keyword' => $keyword,
+            'selected_prodi' => $selected_prodi,
+            'program_studi_options' => $this->program_studi_model->get_all(),
+            'pagination' => $this->pagination,
+            'total_rows' => $total_rows,
+            'current_page' => $page,
+            'per_page' => $per_page
         ]);
     }
 
