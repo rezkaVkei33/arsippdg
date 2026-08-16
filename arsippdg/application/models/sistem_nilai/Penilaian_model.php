@@ -104,12 +104,18 @@ class Penilaian_model extends CI_Model
             ->select('ak_penawaran_mk.*')
             ->from('ak_penawaran_mk')
             ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left')
-            ->where('ak_penawaran_mk.tahun_akademik_id', (int) $tahun_akademik_id)
-            ->where('ak_mata_kuliah.program_studi_id', (int) $program_studi_id)
-            ->where('ak_mata_kuliah.semester', (int) $semester === 1 ? 1 : 2);
+            ->where('ak_penawaran_mk.tahun_akademik_id', (int) $tahun_akademik_id);
+
+        if ($semester !== NULL && $semester !== '') {
+            $this->db->where('ak_mata_kuliah.semester', (int) $semester);
+        }
 
         if ($mata_kuliah_id !== NULL && $mata_kuliah_id !== '') {
             $this->db->where('ak_penawaran_mk.mata_kuliah_id', (int) $mata_kuliah_id);
+        }
+
+        if ($program_studi_id > 0 && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
+            $this->db->where('ak_mata_kuliah.program_studi_id', (int) $program_studi_id);
         }
 
         return $this->db->order_by('ak_penawaran_mk.id', 'DESC')->get()->row();

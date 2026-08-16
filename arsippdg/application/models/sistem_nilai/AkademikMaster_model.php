@@ -35,20 +35,17 @@ class AkademikMaster_model extends CI_Model
     private function build_query($type, $keyword = '', $program_studi_id = NULL)
     {
         if ($type === 'penawaran-mata-kuliah') {
-            $this->db->select('ak_penawaran_mk.*, ak_mata_kuliah.kode_mk, ak_mata_kuliah.nama_mk, ak_tahun_akademik.tahun, ak_tahun_akademik.semester, ak_mata_kuliah.program_studi_id, ak_program_studi.nama_prodi')
+            $this->db->select('ak_penawaran_mk.*, ak_mata_kuliah.kode_mk, ak_mata_kuliah.nama_mk, ak_tahun_akademik.tahun, ak_tahun_akademik.semester')
                 ->from('ak_penawaran_mk')
                 ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left')
-                ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left')
-                ->join('ak_program_studi', 'ak_program_studi.id = ak_mata_kuliah.program_studi_id', 'left');
+                ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left');
 
             if ($keyword !== '') {
                 $this->db->group_start()->like('ak_mata_kuliah.kode_mk', $keyword)->or_like('ak_mata_kuliah.nama_mk', $keyword)->or_like('ak_tahun_akademik.tahun', $keyword)->group_end();
             }
 
-            if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== 'all') {
-                if ($this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
-                    $this->db->where('ak_mata_kuliah.program_studi_id', (int) $program_studi_id);
-                }
+            if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== 'all' && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
+                $this->db->where('ak_mata_kuliah.program_studi_id', (int) $program_studi_id);
             }
             return;
         }

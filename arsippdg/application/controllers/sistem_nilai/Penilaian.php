@@ -27,7 +27,7 @@ class Penilaian extends SistemNilai_Controller
             'program_studi_options' => $this->program_studi_model->get_all(),
             'tahun_akademik_options' => $this->master_model->tahun_akademik(),
             'mata_kuliah_options' => $this->master_model->mata_kuliah(),
-            'semester_options' => ['1' => 'Ganjil', '2' => 'Genap'],
+            'semester_options' => ['1' => 'Semester 1', '2' => 'Semester 2'],
             'selected_prodi' => $selected_prodi,
             'selected_tahun' => $selected_tahun,
             'selected_semester' => $selected_semester,
