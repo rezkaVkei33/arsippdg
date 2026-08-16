@@ -9,6 +9,27 @@
 
     <div class="card border-0 shadow-sm">
         <div class="card-body">
+            <form method="get" action="<?= site_url('sistem-nilai/akademik/riwayat-mahasiswa'); ?>" class="row g-2 mb-4">
+                <input type="hidden" name="tahun_id" value="<?= (int) ($tahun_akademik->id ?? 0); ?>">
+                <input type="hidden" name="semester" value="<?= html_escape((string) ($semester ?? '')); ?>">
+                <div class="col-md-5">
+                    <select name="prodi" class="form-select">
+                        <option value="">Semua Program Studi</option>
+                        <?php foreach ($program_studi_options as $item): ?>
+                            <option value="<?= (int) $item->id; ?>" <?= (string) $selected_prodi === (string) $item->id ? 'selected' : ''; ?>><?= html_escape($item->nama_prodi); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-outline-success"><i class="bi bi-search"></i> Filter</button>
+                </div>
+                <?php if ($selected_prodi !== ''): ?>
+                    <div class="col-auto">
+                        <a href="<?= site_url('sistem-nilai/akademik/riwayat-mahasiswa?tahun_id=' . (int) ($tahun_akademik->id ?? 0) . '&semester=' . urlencode((string) ($semester ?? ''))); ?>" class="btn btn-outline-secondary">Reset</a>
+                    </div>
+                <?php endif; ?>
+            </form>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-hover align-middle mb-0">
                     <thead class="table-light">
@@ -39,6 +60,14 @@
                     </tbody>
                 </table>
             </div>
+
+            <?php $pagination_links = $this->pagination->create_links(); ?>
+            <?php if ($pagination_links !== ''): ?>
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
+                    <small class="text-muted">Menampilkan <?= count($mahasiswa); ?> dari <?= $total_rows; ?> data</small>
+                    <?= $pagination_links; ?>
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 </main>

@@ -30,7 +30,7 @@ class Akademik_model extends CI_Model
         return $this->db->where('id', (int) $id)->get('ak_tahun_akademik')->row();
     }
 
-    public function get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL)
+    public function get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL, $program_studi_id = NULL, $limit = NULL, $offset = 0)
     {
         $this->db
             ->distinct()
@@ -47,7 +47,38 @@ class Akademik_model extends CI_Model
             $this->db->where('ta.semester', $semester);
         }
 
+        if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== '0') {
+            $this->db->where('m.program_studi_id', (int) $program_studi_id);
+        }
+
+        if ($limit !== NULL) {
+            $this->db->limit((int) $limit, (int) $offset);
+        }
+
         return $this->db->get()->result();
+    }
+
+    public function count_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL, $program_studi_id = NULL)
+    {
+        $this->db
+            ->select('COUNT(DISTINCT m.id) AS total')
+            ->from('ak_nilai n')
+            ->join('ak_mahasiswa m', 'm.id = n.mahasiswa_id', 'left')
+            ->join('ak_program_studi p', 'p.id = m.program_studi_id', 'left')
+            ->join('ak_penawaran_mk pm', 'pm.id = n.penawaran_mk_id', 'left')
+            ->join('ak_tahun_akademik ta', 'ta.id = pm.tahun_akademik_id', 'left')
+            ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id);
+
+        if ($semester !== NULL && $semester !== '' && $semester !== '0') {
+            $this->db->where('ta.semester', $semester);
+        }
+
+        if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== '0') {
+            $this->db->where('m.program_studi_id', (int) $program_studi_id);
+        }
+
+        $row = $this->db->get()->row();
+        return (int) ($row->total ?? 0);
     }
 
     public function get_mahasiswa_detail($id)
@@ -63,7 +94,7 @@ class Akademik_model extends CI_Model
     public function get_khs_by_mahasiswa($mahasiswa_id, $tahun_akademik_id, $semester = NULL)
     {
         $this->db
-            ->select('mk.kode_mk, mk.nama_mk, mk.sks, n.nilai_huruf, n.bobot AS nilai_angka, (mk.sks * n.bobot) AS nilai_mutu')
+            ->select('mk.kode_mk, mk.nama_mk, mk.sks, n.nilai_huruf, n.bobot AS nilai_angka, (mk.sks * n.bobot) AS nilai_mutu, n.updated_at')
             ->from('ak_nilai n')
             ->join('ak_penawaran_mk pm', 'pm.id = n.penawaran_mk_id', 'left')
             ->join('ak_mata_kuliah mk', 'mk.id = pm.mata_kuliah_id', 'left')
@@ -77,5 +108,16 @@ class Akademik_model extends CI_Model
         }
 
         return $this->db->get()->result();
+    }
+
+    public function get_latest_khs_update($mahasiswa_id, $tahun_akademik_id)
+    {
+        return $this->db
+            ->select('MAX(n.updated_at) AS updated_at')
+            ->from('ak_nilai n')
+            ->join('ak_penawaran_mk pm', 'pm.id = n.penawaran_mk_id', 'left')
+            ->where('n.mahasiswa_id', (int) $mahasiswa_id)
+            ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id)
+            ->get()->row();
     }
 }

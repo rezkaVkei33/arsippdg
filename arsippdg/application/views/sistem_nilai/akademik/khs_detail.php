@@ -69,9 +69,9 @@
             </div>
 
             <div class="mt-3 d-flex justify-content-end">
-                <button type="button" class="btn btn-outline-success" disabled>
+                <a href="<?= html_escape($export_url ?? '#'); ?>" class="btn btn-outline-success">
                     <i class="bi bi-download"></i> Export KHS
-                </button>
+                </a>
             </div>
         </div>
     </div>

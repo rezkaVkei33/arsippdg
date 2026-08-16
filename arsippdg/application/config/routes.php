@@ -53,6 +53,7 @@ $route['sistem-nilai/penilaian/hapus/(:num)']               = 'sistem_nilai/Peni
 $route['sistem-nilai/akademik/khs']                         = 'sistem_nilai/Akademik/khs';
 $route['sistem-nilai/akademik/riwayat-mahasiswa']           = 'sistem_nilai/Akademik/riwayat_mahasiswa';
 $route['sistem-nilai/akademik/khs-mahasiswa/(:num)/(:num)'] = 'sistem_nilai/Akademik/khs_mahasiswa/$1/$2';
+$route['sistem-nilai/akademik/export-khs/(:num)/(:num)']    = 'sistem_nilai/Akademik/export_khs/$1/$2';
 $route['sistem-nilai/akademik/ips']                         = 'sistem_nilai/Akademik/ips';
 $route['sistem-nilai/akademik/ipk']                         = 'sistem_nilai/Akademik/ipk';
 $route['sistem-nilai/akademik/transkrip-nilai']             = 'sistem_nilai/Akademik/transkrip_nilai';
