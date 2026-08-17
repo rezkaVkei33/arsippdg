@@ -60,7 +60,19 @@ $route['sistem-nilai/akademik/transkrip-nilai']             = 'sistem_nilai/Akad
 $route['sistem-nilai/laporan/rekap-mahasiswa']              = 'sistem_nilai/Laporan/rekap_mahasiswa';
 $route['sistem-nilai/laporan/rekap-nilai']                  = 'sistem_nilai/Laporan/rekap_nilai';
 $route['sistem-nilai/laporan/rekap-mata-kuliah']            = 'sistem_nilai/Laporan/rekap_mata_kuliah';
-$route['sistem-nilai/pengaturan/grade']                     = 'sistem_nilai/Pengaturan/grade';
+$route['sistem-nilai/pengaturan/grade']                 = 'sistem_nilai/Pengaturan/grade';
+$route['sistem-nilai/pengaturan/grade/tambah']          = 'sistem_nilai/Pengaturan/tambah_grade';
+$route['sistem-nilai/pengaturan/grade/simpan']          = 'sistem_nilai/Pengaturan/simpan_grade';
+$route['sistem-nilai/pengaturan/grade/ubah/(:num)']     = 'sistem_nilai/Pengaturan/ubah_grade/$1';
+$route['sistem-nilai/pengaturan/grade/update/(:num)']   = 'sistem_nilai/Pengaturan/update_grade/$1';
+$route['sistem-nilai/pengaturan/grade/hapus/(:num)']    = 'sistem_nilai/Pengaturan/hapus_grade/$1';
+$route['sistem-nilai/pengaturan/tanda-tangan']              = 'sistem_nilai/Pengaturan/tanda_tangan';
+$route['sistem-nilai/pengaturan/tanda-tangan/tambah']       = 'sistem_nilai/Pengaturan/tambah_ttd';
+$route['sistem-nilai/pengaturan/tanda-tangan/simpan']       = 'sistem_nilai/Pengaturan/simpan_ttd';
+$route['sistem-nilai/pengaturan/tanda-tangan/ubah/(:num)']  = 'sistem_nilai/Pengaturan/ubah_ttd/$1';
+$route['sistem-nilai/pengaturan/tanda-tangan/update/(:num)'] = 'sistem_nilai/Pengaturan/update_ttd/$1';
+$route['sistem-nilai/pengaturan/tanda-tangan/hapus/(:num)']  = 'sistem_nilai/Pengaturan/hapus_ttd/$1';
+$route['sistem-nilai/pengaturan/tanda-tangan/toggle-status/(:num)'] = 'sistem_nilai/Pengaturan/toggle_ttd_status/$1';
 
 // ========== USER MANAGEMENT ROUTES ==========
 $route['users']               = 'Users/index';
