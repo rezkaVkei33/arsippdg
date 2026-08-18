@@ -42,6 +42,29 @@ class Grade_model extends CI_Model
         return $this->db->where('id', (int) $id)->get($this->table)->row();
     }
 
+    public function get_by_kode($kode)
+    {
+        $kode = strtoupper(trim((string) $kode));
+        if ($kode === '') {
+            return NULL;
+        }
+
+        return $this->db
+            ->where('kode', $kode)
+            ->get($this->table)
+            ->row();
+    }
+
+    public function get_bobot_by_kode($kode)
+    {
+        $grade = $this->get_by_kode($kode);
+        if (!$grade) {
+            return NULL;
+        }
+
+        return (float) $grade->bobot;
+    }
+
     public function kode_exists($kode, $except_id = NULL)
     {
         $this->db->where('kode', $kode);

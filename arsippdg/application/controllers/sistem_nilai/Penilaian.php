@@ -11,6 +11,7 @@ class Penilaian extends SistemNilai_Controller
         $this->load->model('sistem_nilai/Penilaian_model', 'penilaian_model');
         $this->load->model('sistem_nilai/ProgramStudi_model', 'program_studi_model');
         $this->load->model('sistem_nilai/AkademikMaster_model', 'master_model');
+        $this->load->model('sistem_nilai/Grade_model', 'grade_model');
         $this->load->library(['form_validation', 'pagination', 'Nilai_excel']);
     }
 
@@ -111,7 +112,7 @@ class Penilaian extends SistemNilai_Controller
             $nim = strtoupper(trim((string) $row['nim']));
             $nama = trim((string) $row['nama']);
             $nilai_angka = trim((string) $row['nilai_angka']);
-            $nilai_huruf = trim((string) $row['nilai_huruf']);
+            $nilai_huruf = strtoupper(trim((string) $row['nilai_huruf']));
             $bobot = trim((string) $row['bobot']);
 
             if ($nim === '' || $nama === '') {
@@ -124,15 +125,20 @@ class Penilaian extends SistemNilai_Controller
                 continue;
             }
 
-            if ($nilai_angka === '' || $nilai_huruf === '' || $bobot === '') {
-                $errors[] = 'Baris ' . $row_number . ': nilai_angka, nilai_huruf, dan bobot wajib diisi.';
+            if ($nilai_huruf === '') {
+                $errors[] = 'Baris ' . $row_number . ': nilai_huruf wajib diisi.';
                 continue;
             }
 
-            $nilai_angka_float = (float) $nilai_angka;
-            $bobot_float = (float) $bobot;
-            if ($nilai_angka_float < 0 || $nilai_angka_float > 100 || $bobot_float < 0 || $bobot_float > 100) {
-                $errors[] = 'Baris ' . $row_number . ': nilai_angka dan bobot harus berada dalam rentang 0 sampai 100.';
+            $bobot_float = $this->resolve_grade_bobot($nilai_huruf, $bobot);
+            if ($bobot_float === NULL) {
+                $errors[] = 'Baris ' . $row_number . ': bobot tidak valid atau tidak tersedia di tabel ak_grade.';
+                continue;
+            }
+
+            $nilai_angka_float = $nilai_angka === '' ? NULL : (float) $nilai_angka;
+            if ($nilai_angka_float !== NULL && ($nilai_angka_float < 0 || $nilai_angka_float > 100)) {
+                $errors[] = 'Baris ' . $row_number . ': nilai_angka harus berada dalam rentang 0 sampai 100.';
                 continue;
             }
 
@@ -235,9 +241,9 @@ class Penilaian extends SistemNilai_Controller
         $this->require_post();
         $nilai = $this->get_or_404($id);
 
-        $this->form_validation->set_rules('nilai_angka', 'Nilai Angka', 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]');
+        $this->form_validation->set_rules('nilai_angka', 'Nilai Angka', 'numeric|greater_than_equal_to[0]|less_than_equal_to[100]');
         $this->form_validation->set_rules('nilai_huruf', 'Nilai Huruf', 'required|trim|max_length[2]');
-        $this->form_validation->set_rules('bobot', 'Bobot', 'required|numeric|greater_than_equal_to[0]|less_than_equal_to[100]');
+        $this->form_validation->set_rules('bobot', 'Bobot', 'numeric|greater_than_equal_to[0]|less_than_equal_to[100]');
 
         if ($this->form_validation->run() === FALSE) {
             $this->render('penilaian/form', [
@@ -250,10 +256,21 @@ class Penilaian extends SistemNilai_Controller
             return;
         }
 
+        $nilai_huruf = strtoupper(trim((string) $this->input->post('nilai_huruf', TRUE)));
+        $nilai_angka = trim((string) $this->input->post('nilai_angka', TRUE));
+        $bobot_input = trim((string) $this->input->post('bobot', TRUE));
+
+        $bobot_value = $this->resolve_grade_bobot($nilai_huruf, $bobot_input);
+        if ($bobot_value === NULL) {
+            $this->session->set_flashdata('error', 'Bobot nilai tidak valid untuk kode grade yang dipilih.');
+            redirect('sistem-nilai/penilaian/ubah/' . $id);
+            return;
+        }
+
         $this->penilaian_model->save([
-            'nilai_angka' => (float) $this->input->post('nilai_angka', TRUE),
-            'nilai_huruf' => strtoupper(trim((string) $this->input->post('nilai_huruf', TRUE))),
-            'bobot' => (float) $this->input->post('bobot', TRUE),
+            'nilai_angka' => $nilai_angka === '' ? NULL : (float) $nilai_angka,
+            'nilai_huruf' => $nilai_huruf,
+            'bobot' => $bobot_value,
             'updated_at' => date('Y-m-d H:i:s')
         ], $id);
 
@@ -268,6 +285,26 @@ class Penilaian extends SistemNilai_Controller
         $this->penilaian_model->delete($id);
         $this->session->set_flashdata('success', 'Data nilai berhasil dihapus');
         redirect('sistem-nilai/penilaian/daftar-nilai');
+    }
+
+    private function resolve_grade_bobot($nilai_huruf, $bobot_input = NULL)
+    {
+        $nilai_huruf = strtoupper(trim((string) $nilai_huruf));
+        if ($nilai_huruf === '') {
+            return NULL;
+        }
+
+        $grade = $this->grade_model->get_by_kode($nilai_huruf);
+        if ($grade) {
+            return (float) $grade->bobot;
+        }
+
+        if ($bobot_input !== NULL && trim((string) $bobot_input) !== '') {
+            $value = (float) $bobot_input;
+            return $value >= 0 && $value <= 100 ? $value : NULL;
+        }
+
+        return NULL;
     }
 
     private function normalize_semester($semester)

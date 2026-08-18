@@ -22,7 +22,7 @@
                     </div>
                     <div class="col-md-4">
                         <label for="nilai_angka" class="form-label">Nilai Angka</label>
-                        <input id="nilai_angka" name="nilai_angka" type="number" step="0.01" min="0" max="100" class="form-control <?= form_error('nilai_angka') ? 'is-invalid' : ''; ?>" value="<?= html_escape(set_value('nilai_angka', $nilai->nilai_angka)); ?>">
+                        <input id="nilai_angka" name="nilai_angka" type="number" step="0.01" min="0" max="100" class="form-control <?= form_error('nilai_angka') ? 'is-invalid' : ''; ?>" value="<?= html_escape(set_value('nilai_angka', $nilai->nilai_angka ?? '')); ?>" placeholder="Kosongkan jika tidak ada">
                         <div class="invalid-feedback"><?= form_error('nilai_angka'); ?></div>
                     </div>
                     <div class="col-md-4">

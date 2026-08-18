@@ -88,9 +88,9 @@
                             <tbody>
                                 <tr><td>nim</td><td>NIM mahasiswa sesuai filter</td><td>Ya</td></tr>
                                 <tr><td>nama</td><td>Nama mahasiswa</td><td>Ya</td></tr>
-                                <tr><td>nilai_angka</td><td>Nilai persentase 0 - 100</td><td>Ya</td></tr>
+                                <tr><td>nilai_angka</td><td>Nilai persentase 0 - 100, boleh dikosongkan</td><td>Tidak</td></tr>
                                 <tr><td>nilai_huruf</td><td>Nilai huruf, contoh A, B+, BC</td><td>Ya</td></tr>
-                                <tr><td>bobot</td><td>Bobot nilai 0 - 100</td><td>Ya</td></tr>
+                                <tr><td>bobot</td><td>Bobot akan diambil dari tabel ak_grade sesuai nilai_huruf, tetapi tetap bisa diisi manual jika diperlukan</td><td>Tidak</td></tr>
                             </tbody>
                         </table>
                     </div>
