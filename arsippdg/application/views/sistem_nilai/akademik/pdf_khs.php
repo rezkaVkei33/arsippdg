@@ -2,256 +2,410 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>KHS</title>
+    <title>Kartu Hasil Studi</title>
     <style>
         @page {
             size: A4;
-            margin: 24mm 15mm 18mm 15mm;
+            margin: 8mm 10mm 10mm 10mm;
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 11px;
-            color: #111;
             margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111;
+            background: #fff;
+            font-size: 11px;
         }
 
-        .header {
+        .page {
+            width: 100%;
+            min-height: 100%;
+            box-sizing: border-box;
+        }
+
+        .header-wrap {
+            border: 2px solid #111;
+            border-bottom: 3px solid #111;
+            padding: 8px 14px 6px 14px;
+            background: #fff;
+        }
+
+        .header-row {
             display: table;
             width: 100%;
-            margin-bottom: 10px;
+            border-collapse: collapse;
         }
 
-        .logo-wrap {
+        .logo-box {
             display: table-cell;
             width: 70px;
-            vertical-align: middle;
             text-align: center;
+            vertical-align: middle;
         }
 
-        .logo-wrap img {
-            width: 58px;
-            height: 58px;
+        .logo-box img {
+            width: 52px;
+            height: 52px;
         }
 
-        .instansi {
+        .instansi-box {
             display: table-cell;
             vertical-align: middle;
-            text-align: left;
             padding-left: 12px;
+            text-align: center;
         }
 
-        .instansi h2 {
-            margin: 0;
-            font-size: 22px;
+        .instansi-box .brand {
             font-weight: bold;
+            font-size: 16px;
             letter-spacing: 0.5px;
+            margin: 0;
         }
 
-        .line {
-            border-top: 2px solid #111;
-            margin: 8px 0 10px 0;
+        .instansi-box .subbrand {
+            font-weight: bold;
+            font-size: 10px;
+            letter-spacing: 0.2px;
+            margin-top: 2px;
         }
 
-        .title {
+        .instansi-box .alamat {
+            font-size: 8px;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+
+        .title-wrap {
             text-align: center;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .title-wrap h1 {
+            margin: 0;
             font-size: 18px;
-            font-weight: bold;
-            margin: 12px 0 6px 0;
-            text-transform: uppercase;
-        }
-
-        .title-small {
-            text-align: center;
-            font-size: 14px;
-            font-weight: bold;
-            margin: 0 0 10px 0;
-        }
-
-        .year-box {
-            text-align: center;
-            margin: 8px auto 12px auto;
-            font-weight: bold;
-            font-size: 12px;
+            letter-spacing: 0.7px;
         }
 
         .meta {
             width: 100%;
-            margin-bottom: 12px;
             border-collapse: collapse;
             font-size: 11px;
+            margin-top: 4px;
         }
 
         .meta td {
-            padding: 4px 6px;
+            padding: 3px 4px;
             vertical-align: top;
         }
 
         .meta .label {
-            width: 28%;
             font-weight: bold;
+            width: 18%;
+        }
+
+        .meta .value {
+            width: 32%;
+        }
+
+        .table-wrap {
+            margin-top: 8px;
+            border: 2px solid #111;
+            border-collapse: collapse;
         }
 
         table.khs {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
-            font-size: 10.5px;
+            table-layout: fixed;
+            font-size: 10px;
         }
 
         table.khs th,
         table.khs td {
             border: 1px solid #111;
-            padding: 5px 6px;
+            padding: 4px 5px;
             text-align: center;
             vertical-align: middle;
         }
 
         table.khs th {
-            background: #f1f1f1;
             font-weight: bold;
+            background: #f4f4f4;
         }
 
-        .text-left {
+        table.khs td.left {
             text-align: left;
         }
 
-        .summary {
+        .summary-row {
             width: 100%;
-            margin-top: 10px;
-            border-collapse: collapse;
-            font-size: 11px;
+            margin-top: 12px;
+            overflow: hidden;
         }
 
-        .summary td {
+        .summary-left {
+            width: 58%;
+            float: left;
+        }
+
+        .summary-right {
+            width: 42%;
+            float: right;
+        }
+
+        .note-box {
             border: 1px solid #111;
-            padding: 5px 6px;
+            background: #fff;
+            margin-top: 0;
         }
 
-        .summary .label {
+        .note-box table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+        }
+
+        .note-box td {
+            border: 1px solid #111;
+            padding: 4px 5px;
+        }
+
+        .note-box .label {
             font-weight: bold;
             text-align: right;
-            width: 80%;
+            width: 65%;
         }
 
-        .signature-wrap {
+        .keterangan {
+            border: 1px solid #111;
+            margin-top: 10px;
+            padding: 6px 8px;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .keterangan table {
             width: 100%;
-            margin-top: 30px;
-            font-size: 11px;
+            border-collapse: collapse;
         }
 
-        .signature-box {
-            width: 250px;
-            margin-left: auto;
+        .keterangan td {
+            border: 1px solid #111;
+            padding: 4px;
             text-align: center;
         }
 
-        .signature-box .date-line {
-            margin-top: 10px;
-            margin-bottom: 28px;
+        .signature-box {
+            width: 255px;
+            margin-top: 24px;
+            margin-left: auto;
+            text-align: center;
             font-size: 11px;
+        }
+
+        .signature-box .date {
+            margin-bottom: 40px;
         }
 
         .signature-box .name {
             font-weight: bold;
-            margin-top: 10px;
-            text-decoration: none;
             font-size: 12px;
+            margin-top: 4px;
         }
 
         .signature-box .nip {
             margin-top: 2px;
-            font-size: 11px;
+            font-size: 10px;
+        }
+
+        .stamp {
+            position: relative;
+            margin: 0 auto;
+            width: 120px;
+            height: 120px;
+        }
+
+        .stamp-ring {
+            width: 115px;
+            height: 115px;
+            border: 2px solid #c00;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .stamp-ring::before,
+        .stamp-ring::after {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border: 1px solid #c00;
+            border-radius: 50%;
+        }
+
+        .stamp-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #c00;
+            transform: rotate(-15deg);
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo-wrap">
-            <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek">
+    <div class="page">
+        <div class="header-wrap">
+            <div class="header-row">
+                <div class="logo-box">
+                    <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek">
+                </div>
+                <div class="instansi-box">
+                    <div class="brand">POLITEKNIK DARMA GANESHA</div>
+                    <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
+                    <div class="alamat">Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
+                    Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
+                    Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
+                    Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id</div>
+                </div>
+            </div>
         </div>
-        <div class="instansi">
-            <h2>Politeknik Darma Ganesha</h2>
+
+        <div class="title-wrap">
+            <h1>KARTU HASIL STUDI (KHS)</h1>
         </div>
-    </div>
 
-    <div class="line"></div>
-
-    <div class="title">Kartu Hasil Studi</div>
-
-    <div class="year-box">
-        Tahun Akademik : <?= html_escape($tahun_akademik->tahun ?? '-'); ?> / <?= html_escape($tahun_akademik->semester ?? '-'); ?>
-    </div>
-
-    <table class="meta">
-        <tr>
-            <td class="label">Nama Mahasiswa</td>
-            <td>: <?= html_escape($mahasiswa->nama ?? '-'); ?></td>
-            <td class="label">NIM</td>
-            <td>: <?= html_escape($mahasiswa->nim ?? '-'); ?></td>
-        </tr>
-        <tr>
-            <td class="label">Program Studi</td>
-            <td>: <?= html_escape($mahasiswa->nama_prodi ?? '-'); ?></td>
-            <td class="label">Semester</td>
-            <td>: <?= html_escape((string) ($tahun_akademik->semester ?? '-')); ?> / <?= html_escape(strtolower((string) ($tahun_akademik->semester ?? '-')) === 'ganjil' ? 'Ganjil' : 'Genap'); ?></td>
-        </tr>
-    </table>
-
-    <table class="khs">
-        <thead>
+        <table class="meta">
             <tr>
-                <th>No</th>
-                <th>Kode Mata Kuliah</th>
-                <th>Mata Kuliah</th>
-                <th>SKS</th>
-                <th>Nilai Huruf</th>
-                <th>Nilai Angka</th>
-                <th>Nilai Mutu</th>
+                <td class="label">Nama Mahasiswa</td>
+                <td class="value">: <?= html_escape($mahasiswa->nama ?? '-'); ?></td>
+                <td class="label">Program Studi</td>
+                <td>: <?= html_escape($mahasiswa->nama_prodi ?? '-'); ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php if (empty($khs)): ?>
-                <tr>
-                    <td colspan="7">Belum ada data KHS.</td>
-                </tr>
-            <?php else: ?>
-                <?php foreach ($khs as $index => $row): ?>
+            <tr>
+                <td class="label">NIM</td>
+                <td class="value">: <?= html_escape($mahasiswa->nim ?? '-'); ?></td>
+                <td class="label">Semester</td>
+                <td>: <?= html_escape(($tahun_akademik->semester ?? '')) . ' / ' . (strtolower((string) ($tahun_akademik->semester ?? '')) === 'ganjil' ? 'Ganjil' : 'Genap'); ?></td>
+            </tr>
+            <tr>
+                <td class="label">Tahun Akademik</td>
+                <td class="value">: <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?> / <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?></td>
+                <td class="label"></td>
+                <td></td>
+            </tr>
+        </table>
+
+        <div class="table-wrap">
+            <table class="khs">
+                <thead>
                     <tr>
-                        <td><?= $index + 1; ?></td>
-                        <td><?= html_escape($row->kode_mk ?? '-'); ?></td>
-                        <td class="text-left"><?= html_escape($row->nama_mk ?? '-'); ?></td>
-                        <td><?= html_escape((string) ($row->sks ?? 0)); ?></td>
-                        <td><?= html_escape($row->nilai_huruf ?? '-'); ?></td>
-                        <td><?= html_escape((string) ($row->nilai_angka ?? 0)); ?></td>
-                        <td><?= html_escape((string) ($row->nilai_mutu ?? 0)); ?></td>
+                        <th style="width: 5%;">No</th>
+                        <th style="width: 14%;">Kode MK</th>
+                        <th style="width: 33%;">Mata Kuliah</th>
+                        <th style="width: 8%;">SKS</th>
+                        <th style="width: 11%;">Nilai Huruf</th>
+                        <th style="width: 12%;">Nilai Angka</th>
+                        <th style="width: 12%;">Mutu</th>
                     </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
-        </tbody>
-    </table>
+                </thead>
+                <tbody>
+                    <?php if (empty($khs)): ?>
+                        <tr>
+                            <td colspan="7">Belum ada data KHS.</td>
+                        </tr>
+                    <?php else: ?>
+                        <?php foreach ($khs as $index => $row): ?>
+                            <tr>
+                                <td><?= $index + 1; ?></td>
+                                <td><?= html_escape($row->kode_mk ?? '-'); ?></td>
+                                <td class="left"><?= html_escape($row->nama_mk ?? '-'); ?></td>
+                                <td><?= html_escape((string) ($row->sks ?? 0)); ?></td>
+                                <td><?= html_escape($row->nilai_huruf ?? '-'); ?></td>
+                                <td><?= html_escape((string) ($row->nilai_angka ?? 0)); ?></td>
+                                <td><?= html_escape((string) ($row->nilai_mutu ?? 0)); ?></td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
+                    <tr>
+                        <td colspan="3" style="font-weight:bold; text-align:center;">Jumlah</td>
+                        <td style="font-weight:bold;"><?= html_escape((string) number_format((float) $total_sks, 0, ',', '.')); ?></td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-weight:bold;"><?= html_escape(number_format((float) $total_nilai_mutu, 2, ',', '.')); ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <table class="summary">
-        <tr>
-            <td class="label">Jumlah SKS</td>
-            <td><?= html_escape((string) number_format((float) $total_sks, 2, ',', '.')); ?></td>
-        </tr>
-        <tr>
-            <td class="label">Jumlah Nilai Mutu</td>
-            <td><?= html_escape((string) number_format((float) $total_nilai_mutu, 2, ',', '.')); ?></td>
-        </tr>
-        <tr>
-            <td class="label">IP</td>
-            <td><?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></td>
-        </tr>
-    </table>
+        <div class="summary-row">
+            <div class="summary-left">
+                <div class="note-box">
+                    <table>
+                        <tr>
+                            <td class="label">Indeks Prestasi Semester</td>
+                            <td><?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Total Mutu</td>
+                            <td><?= html_escape(number_format((float) $total_nilai_mutu, 2, ',', '.')); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Indeks Prestasi Kumulatif</td>
+                            <td><?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Total SKS yang ditempuh</td>
+                            <td><?= html_escape((string) number_format((float) $total_sks, 0, ',', '.')); ?></td>
+                        </tr>
+                        <tr>
+                            <td class="label">Total SKS yang diperoleh</td>
+                            <td><?= html_escape((string) number_format((float) $total_sks, 0, ',', '.')); ?></td>
+                        </tr>
+                    </table>
+                </div>
 
-    <div class="signature-wrap">
-        <div class="signature-box">
-            <div>Belitung, <?= html_escape($tanggal_update); ?></div>
-            <div class="date-line">Direktur</div>
-            <div class="name">Frasetyo Angga Saputra, S.E., M.Ak.</div>
-            <div class="nip">NUPTK. </div>
+                <div class="keterangan">
+                    <div style="font-weight:bold; margin-bottom:6px;">Keterangan :</div>
+                    <table>
+                        <tr>
+                            <td>Nilai Huruf (Mutu)</td>
+                            <td>A</td>
+                            <td>B</td>
+                            <td>C</td>
+                            <td>D</td>
+                            <td>E</td>
+                        </tr>
+                        <tr>
+                            <td>Bobot</td>
+                            <td>4</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="summary-right">
+                <div class="signature-box">
+                    <div class="date">Belitung, <?= html_escape($tanggal_update); ?></div>
+                    <div>Direktur</div>
+                    <div class="stamp">
+                        <div class="stamp-ring"></div>
+                        <div class="stamp-text">R</div>
+                    </div>
+                    <div class="name">FRASETYO ANGGA SAPUTRA, S.E., M.Ak.</div>
+                    <div class="nip">NUPTK. 0960774765430262</div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
