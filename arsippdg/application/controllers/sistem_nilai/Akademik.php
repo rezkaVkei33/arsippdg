@@ -10,6 +10,8 @@ class Akademik extends SistemNilai_Controller
         parent::__construct();
         $this->load->model('sistem_nilai/Akademik_model', 'akademik_model');
         $this->load->model('sistem_nilai/ProgramStudi_model', 'program_studi_model');
+        $this->load->model('sistem_nilai/Grade_model', 'grade_model');
+        $this->load->model('sistem_nilai/PejabatTtd_model', 'pejabat_ttd_model');
         $this->load->library('pagination');
     }
 
@@ -152,6 +154,22 @@ class Akademik extends SistemNilai_Controller
         $updated = $this->akademik_model->get_latest_khs_update($mahasiswa_id, $tahun_akademik_id);
         $tanggal_update = !empty($updated->updated_at) ? date('d F Y', strtotime($updated->updated_at)) : date('d F Y');
 
+        $all_khs = $this->akademik_model->get_khs_by_mahasiswa_all($mahasiswa_id);
+        $total_sks_kumulatif = 0;
+        $total_mutu_kumulatif = 0;
+        foreach ($all_khs as $row) {
+            $total_sks_kumulatif += (float) ($row->sks ?? 0);
+            $total_mutu_kumulatif += (float) ($row->nilai_mutu ?? 0);
+        }
+        $ipk = $total_sks_kumulatif > 0 ? $total_mutu_kumulatif / $total_sks_kumulatif : 0;
+
+        $semester_number = $this->to_semester_number($tahun->semester ?? 'Ganjil');
+        $semester_label = strtolower((string) ($tahun->semester ?? 'Ganjil')) === 'genap' ? 'Genap' : 'Ganjil';
+
+        $grades = $this->grade_model->get_all(NULL, NULL, 0);
+        $pejabat = $this->pejabat_ttd_model->get_active();
+        $ttd = !empty($pejabat) ? $pejabat[0] : NULL;
+
         $html = $this->load->view('sistem_nilai/akademik/pdf_khs', [
             'mahasiswa' => $mahasiswa,
             'tahun_akademik' => $tahun,
@@ -159,10 +177,32 @@ class Akademik extends SistemNilai_Controller
             'total_sks' => $total_sks,
             'total_nilai_mutu' => $total_nilai_mutu,
             'ip' => $ip,
+            'ipk' => $ipk,
+            'total_sks_kumulatif' => $total_sks_kumulatif,
+            'total_mutu_kumulatif' => $total_mutu_kumulatif,
+            'semester_number' => $semester_number,
+            'semester_label' => $semester_label,
             'tanggal_update' => $tanggal_update,
+            'grades' => $grades,
+            'ttd' => $ttd,
         ], TRUE);
 
         $this->pdf_generator->generate($html, 'KHS_' . $mahasiswa->nim, true);
+    }
+
+    private function to_semester_number($semester)
+    {
+        $value = strtolower(trim((string) $semester));
+
+        if ($value === 'genap' || $value === '2') {
+            return '2';
+        }
+
+        if ($value === 'ganjil' || $value === '1') {
+            return '1';
+        }
+
+        return '1';
     }
 
     public function ips() { $this->render_empty_page('Indeks Prestasi Semester (IPS)', 'Akademik', 'bi-graph-up-arrow'); }

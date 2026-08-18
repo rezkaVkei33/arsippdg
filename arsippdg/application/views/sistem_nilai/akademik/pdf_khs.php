@@ -6,16 +6,16 @@
     <style>
         @page {
             size: A4;
-            margin: 8mm 10mm 10mm 10mm;
+            margin: 8mm 10mm 8mm 10mm;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: 'Times New Roman', Times, serif;
             color: #111;
             background: #fff;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .page {
@@ -24,86 +24,82 @@
             box-sizing: border-box;
         }
 
-        .header-wrap {
-            border: 2px solid #111;
-            border-bottom: 3px solid #111;
-            padding: 8px 14px 6px 14px;
+        .kop-wrapper {
+            border: 1px solid #111;
+            border-bottom: 2px solid #111;
+            padding: 6px 10px 4px 10px;
             background: #fff;
         }
 
-        .header-row {
-            display: table;
+        .kop-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .logo-box {
-            display: table-cell;
-            width: 70px;
-            text-align: center;
+        .kop-table td {
+            padding: 0;
             vertical-align: middle;
+        }
+
+        .logo-box {
+            width: 80px;
+            text-align: center;
         }
 
         .logo-box img {
-            width: 52px;
-            height: 52px;
+            width: 56px;
+            height: 56px;
         }
 
-        .instansi-box {
-            display: table-cell;
-            vertical-align: middle;
-            padding-left: 12px;
+        .instansi {
             text-align: center;
-        }
-
-        .instansi-box .brand {
-            font-weight: bold;
-            font-size: 16px;
-            letter-spacing: 0.5px;
-            margin: 0;
-        }
-
-        .instansi-box .subbrand {
-            font-weight: bold;
-            font-size: 10px;
-            letter-spacing: 0.2px;
-            margin-top: 2px;
-        }
-
-        .instansi-box .alamat {
-            font-size: 8px;
-            margin-top: 3px;
             line-height: 1.4;
+            font-weight: bold;
+        }
+
+        .instansi .brand {
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .instansi .subbrand {
+            font-size: 11px;
+        }
+
+        .instansi .alamat {
+            font-size: 9px;
+            font-weight: normal;
         }
 
         .title-wrap {
             text-align: center;
-            margin-top: 12px;
-            margin-bottom: 6px;
+            margin-top: 10px;
+            margin-bottom: 8px;
             font-weight: bold;
         }
 
         .title-wrap h1 {
             margin: 0;
-            font-size: 18px;
-            letter-spacing: 0.7px;
+            font-size: 19px;
+            letter-spacing: 0.5px;
         }
 
         .meta {
             width: 100%;
             border-collapse: collapse;
-            font-size: 11px;
-            margin-top: 4px;
+            font-size: 12px;
+            margin-bottom: 8px;
         }
 
         .meta td {
-            padding: 3px 4px;
+            padding: 2px 4px;
             vertical-align: top;
         }
 
         .meta .label {
-            font-weight: bold;
             width: 18%;
+            font-weight: bold;
+            white-space: nowrap;
         }
 
         .meta .value {
@@ -111,109 +107,114 @@
         }
 
         .table-wrap {
-            margin-top: 8px;
-            border: 2px solid #111;
-            border-collapse: collapse;
+            border: 1px solid #111;
+            background: #fff;
         }
 
         table.khs {
             width: 100%;
             border-collapse: collapse;
             table-layout: fixed;
-            font-size: 10px;
+            font-size: 11px;
         }
 
         table.khs th,
         table.khs td {
             border: 1px solid #111;
-            padding: 4px 5px;
+            padding: 4px 4px;
             text-align: center;
             vertical-align: middle;
         }
 
         table.khs th {
             font-weight: bold;
-            background: #f4f4f4;
+            background: #f8f8f8;
         }
 
         table.khs td.left {
             text-align: left;
         }
 
-        .summary-row {
+        .footer-area {
             width: 100%;
             margin-top: 12px;
-            overflow: hidden;
         }
 
         .summary-left {
-            width: 58%;
+            width: 62%;
             float: left;
         }
 
         .summary-right {
-            width: 42%;
+            width: 36%;
             float: right;
         }
 
-        .note-box {
-            border: 1px solid #111;
-            background: #fff;
-            margin-top: 0;
+        .ips-label {
+            font-size: 12px;
+            font-weight: bold;
+            margin: 2px 0 6px 0;
         }
 
-        .note-box table {
+        .mini-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 10px;
+            border: 1px solid #111;
+            font-size: 11px;
         }
 
-        .note-box td {
+        .mini-table td {
             border: 1px solid #111;
             padding: 4px 5px;
         }
 
-        .note-box .label {
+        .mini-table .label {
+            width: 70%;
             font-weight: bold;
             text-align: right;
-            width: 65%;
         }
 
         .keterangan {
-            border: 1px solid #111;
             margin-top: 10px;
-            padding: 6px 8px;
-            font-size: 10px;
-            line-height: 1.5;
+            font-size: 11px;
         }
 
-        .keterangan table {
+        .keterangan .title {
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .keterangan-table {
             width: 100%;
             border-collapse: collapse;
+            border: 1px solid #111;
         }
 
-        .keterangan td {
+        .keterangan-table td {
             border: 1px solid #111;
-            padding: 4px;
+            padding: 4px 5px;
             text-align: center;
         }
 
         .signature-box {
-            width: 255px;
-            margin-top: 24px;
-            margin-left: auto;
+            margin-top: 8px;
             text-align: center;
-            font-size: 11px;
+            font-size: 12px;
+            width: 100%;
         }
 
         .signature-box .date {
-            margin-bottom: 40px;
+            margin-bottom: 24px;
+        }
+
+        .signature-box .role {
+            margin-bottom: 8px;
         }
 
         .signature-box .name {
             font-weight: bold;
+            margin-top: 8px;
             font-size: 12px;
-            margin-top: 4px;
         }
 
         .signature-box .nip {
@@ -221,27 +222,32 @@
             font-size: 10px;
         }
 
-        .stamp {
-            position: relative;
-            margin: 0 auto;
-            width: 120px;
-            height: 120px;
+        .ttd-image {
+            margin: 0 auto 6px auto;
+            max-width: 180px;
+            max-height: 90px;
+            display: block;
         }
 
-        .stamp-ring {
-            width: 115px;
-            height: 115px;
+        .stamp-wrap {
+            width: 130px;
+            height: 90px;
+            position: relative;
+            margin: 0 auto 6px auto;
+        }
+
+        .stamp-circle {
+            position: absolute;
+            inset: 0;
             border: 2px solid #c00;
             border-radius: 50%;
-            margin: 0 auto;
-            position: relative;
         }
 
-        .stamp-ring::before,
-        .stamp-ring::after {
+        .stamp-circle::before,
+        .stamp-circle::after {
             content: "";
             position: absolute;
-            inset: 7px;
+            inset: 10px;
             border: 1px solid #c00;
             border-radius: 50%;
         }
@@ -252,29 +258,31 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
-            font-weight: bold;
             color: #c00;
-            transform: rotate(-15deg);
+            font-weight: bold;
+            font-size: 18px;
+            transform: rotate(-18deg);
         }
     </style>
 </head>
 <body>
     <div class="page">
-        <div class="header-wrap">
-            <div class="header-row">
-                <div class="logo-box">
-                    <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek">
-                </div>
-                <div class="instansi-box">
-                    <div class="brand">POLITEKNIK DARMA GANESHA</div>
-                    <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
-                    <div class="alamat">Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
-                    Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
-                    Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
-                    Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id</div>
-                </div>
-            </div>
+        <div class="kop-wrapper">
+            <table class="kop-table">
+                <tr>
+                    <td class="logo-box"><img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek"></td>
+                    <td class="instansi">
+                        <div class="brand">POLITEKNIK DARMA GANESHA</div>
+                        <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
+                        <div class="alamat">
+                            Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
+                            Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
+                            Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
+                            Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
 
         <div class="title-wrap">
@@ -292,13 +300,13 @@
                 <td class="label">NIM</td>
                 <td class="value">: <?= html_escape($mahasiswa->nim ?? '-'); ?></td>
                 <td class="label">Semester</td>
-                <td>: <?= html_escape(($tahun_akademik->semester ?? '')) . ' / ' . (strtolower((string) ($tahun_akademik->semester ?? '')) === 'ganjil' ? 'Ganjil' : 'Genap'); ?></td>
+                <td>: <?= html_escape((string) ($semester_number ?? '1')); ?> / <?= html_escape((string) ($semester_label ?? 'Ganjil')); ?></td>
             </tr>
             <tr>
                 <td class="label">Tahun Akademik</td>
-                <td class="value">: <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?> / <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?></td>
-                <td class="label"></td>
-                <td></td>
+                <td class="value">: <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?> / <?= html_escape((string) (($tahun_akademik->tahun ?? 0) + 1)); ?></td>
+                <td class="label"> </td>
+                <td> </td>
             </tr>
         </table>
 
@@ -306,13 +314,16 @@
             <table class="khs">
                 <thead>
                     <tr>
-                        <th style="width: 5%;">No</th>
-                        <th style="width: 14%;">Kode MK</th>
-                        <th style="width: 33%;">Mata Kuliah</th>
-                        <th style="width: 8%;">SKS</th>
-                        <th style="width: 11%;">Nilai Huruf</th>
-                        <th style="width: 12%;">Nilai Angka</th>
-                        <th style="width: 12%;">Mutu</th>
+                        <th rowspan="2" style="width: 5%;">No</th>
+                        <th rowspan="2" style="width: 12%;">Kode MK</th>
+                        <th rowspan="2" style="width: 34%;">Mata Kuliah</th>
+                        <th rowspan="2" style="width: 8%;">SKS</th>
+                        <th colspan="2" style="width: 24%;">Nilai</th>
+                        <th rowspan="2" style="width: 10%;">Mutu</th>
+                    </tr>
+                    <tr>
+                        <th style="width: 12%;">Huruf</th>
+                        <th style="width: 12%;">Angka</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -344,52 +355,49 @@
             </table>
         </div>
 
-        <div class="summary-row">
+        <div class="footer-area">
             <div class="summary-left">
-                <div class="note-box">
-                    <table>
-                        <tr>
-                            <td class="label">Indeks Prestasi Semester</td>
-                            <td><?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></td>
-                        </tr>
-                        <tr>
-                            <td class="label">Total Mutu</td>
-                            <td><?= html_escape(number_format((float) $total_nilai_mutu, 2, ',', '.')); ?></td>
-                        </tr>
-                        <tr>
-                            <td class="label">Indeks Prestasi Kumulatif</td>
-                            <td><?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></td>
-                        </tr>
-                        <tr>
-                            <td class="label">Total SKS yang ditempuh</td>
-                            <td><?= html_escape((string) number_format((float) $total_sks, 0, ',', '.')); ?></td>
-                        </tr>
-                        <tr>
-                            <td class="label">Total SKS yang diperoleh</td>
-                            <td><?= html_escape((string) number_format((float) $total_sks, 0, ',', '.')); ?></td>
-                        </tr>
-                    </table>
-                </div>
+                <div class="ips-label">Index Prestasi Semester : <?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></div>
+
+                <table class="mini-table">
+                    <tr>
+                        <td class="label">Total Mutu</td>
+                        <td><?= html_escape(number_format((float) $total_nilai_mutu, 2, ',', '.')); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Indeks Prestasi Kumulatif</td>
+                        <td><?= html_escape(number_format((float) $ipk, 2, ',', '.')); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Total SKS yang ditempuh</td>
+                        <td><?= html_escape((string) number_format((float) $total_sks_kumulatif, 0, ',', '.')); ?></td>
+                    </tr>
+                    <tr>
+                        <td class="label">Total SKS yang diperoleh</td>
+                        <td><?= html_escape((string) number_format((float) $total_sks, 0, ',', '.')); ?></td>
+                    </tr>
+                </table>
 
                 <div class="keterangan">
-                    <div style="font-weight:bold; margin-bottom:6px;">Keterangan :</div>
-                    <table>
+                    <div class="title">Keterangan :</div>
+                    <table class="keterangan-table">
                         <tr>
-                            <td>Nilai Huruf (Mutu)</td>
-                            <td>A</td>
-                            <td>B</td>
-                            <td>C</td>
-                            <td>D</td>
-                            <td>E</td>
+                            <td style="font-weight:bold; width: 60%;">Nilai Huruf (Mutu)</td>
+                            <td style="font-weight:bold; width: 40%;">Bobot</td>
                         </tr>
-                        <tr>
-                            <td>Bobot</td>
-                            <td>4</td>
-                            <td>3</td>
-                            <td>2</td>
-                            <td>1</td>
-                            <td>0</td>
-                        </tr>
+                        <?php if (!empty($grades)): ?>
+                            <?php foreach ($grades as $grade): ?>
+                                <tr>
+                                    <td><?= html_escape($grade->kode ?? '-'); ?></td>
+                                    <td><?= html_escape((string) ($grade->bobot ?? 0)); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        <?php endif; ?>
                     </table>
                 </div>
             </div>
@@ -397,15 +405,22 @@
             <div class="summary-right">
                 <div class="signature-box">
                     <div class="date">Belitung, <?= html_escape($tanggal_update); ?></div>
-                    <div>Direktur</div>
-                    <div class="stamp">
-                        <div class="stamp-ring"></div>
-                        <div class="stamp-text">R</div>
-                    </div>
-                    <div class="name">FRASETYO ANGGA SAPUTRA, S.E., M.Ak.</div>
-                    <div class="nip">NUPTK. 0960774765430262</div>
+                    <div class="role">Direktur</div>
+
+                    <?php if (!empty($ttd) && !empty($ttd->ttd_path)): ?>
+                        <img class="ttd-image" src="<?= base_url('assets/' . $ttd->ttd_path); ?>" alt="Tanda Tangan">
+                    <?php else: ?>
+                        <div class="stamp-wrap">
+                            <div class="stamp-circle"></div>
+                            <div class="stamp-text">R</div>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="name"><?= html_escape($ttd->nama_pejabat ?? 'FRASETYO ANGGA SAPUTRA, S.E., M.Ak.'); ?></div>
+                    <div class="nip"><?= !empty($ttd->nomor_induk) ? 'NUPTK. ' . html_escape($ttd->nomor_induk) : 'NUPTK. 0960774765430262'; ?></div>
                 </div>
             </div>
+            <div style="clear: both;"></div>
         </div>
     </div>
 </body>

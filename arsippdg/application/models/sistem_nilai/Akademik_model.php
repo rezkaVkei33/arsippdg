@@ -110,6 +110,22 @@ class Akademik_model extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function get_khs_by_mahasiswa_all($mahasiswa_id)
+    {
+        $this->db
+            ->select('mk.kode_mk, mk.nama_mk, mk.sks, n.nilai_huruf, n.bobot AS nilai_angka, (mk.sks * n.bobot) AS nilai_mutu, ta.tahun, ta.semester, pm.tahun_akademik_id')
+            ->from('ak_nilai n')
+            ->join('ak_penawaran_mk pm', 'pm.id = n.penawaran_mk_id', 'left')
+            ->join('ak_mata_kuliah mk', 'mk.id = pm.mata_kuliah_id', 'left')
+            ->join('ak_tahun_akademik ta', 'ta.id = pm.tahun_akademik_id', 'left')
+            ->where('n.mahasiswa_id', (int) $mahasiswa_id)
+            ->order_by('ta.tahun', 'ASC')
+            ->order_by('ta.semester', 'ASC')
+            ->order_by('mk.kode_mk', 'ASC');
+
+        return $this->db->get()->result();
+    }
+
     public function get_latest_khs_update($mahasiswa_id, $tahun_akademik_id)
     {
         return $this->db
