@@ -26,29 +26,31 @@
 
         .kop-wrapper {
             border-bottom: 2px solid #111;
-            padding: 0 8px 6px 8px;
+            padding: 6px 10px 8px 10px;
             background: #fff;
         }
 
         .kop-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 14px;
             width: 100%;
+            min-height: 120px;
         }
 
         .logo-box {
-            width: 72px;
-            min-width: 72px;
-            text-align: center;
-            margin-left: -2px;
+            width: 110px;
+            min-width: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 0;
         }
 
         .logo-box img {
-            width: 62px;
-            height: 62px;
+            width: 92px;
+            height: 92px;
             display: block;
-            margin: 0 auto;
         }
 
         .instansi {
@@ -56,20 +58,25 @@
             line-height: 1.35;
             font-weight: bold;
             flex: 1;
+            padding-left: 4px;
         }
 
         .instansi .brand {
-            font-size: 18px;
-            letter-spacing: 0.5px;
+            font-size: 29px;
+            letter-spacing: 0.4px;
+            line-height: 1.15;
         }
 
         .instansi .subbrand {
-            font-size: 11px;
+            font-size: 16px;
+            margin-top: 2px;
         }
 
         .instansi .alamat {
-            font-size: 9px;
+            font-size: 11px;
             font-weight: normal;
+            margin-top: 4px;
+            line-height: 1.4;
         }
 
         .title-wrap {
@@ -405,8 +412,8 @@
 
             <div class="summary-right">
                 <div class="signature-box">
-                    <div class="date">Belitung, <?= html_escape($tanggal_update); ?></div>
-                    <div class="role">Direktur</div>
+                    <div class="date">Belitung, <?= html_escape(!empty($ttd->tanggal_ttd) ? date('d F Y', strtotime($ttd->tanggal_ttd)) : $tanggal_update); ?></div>
+                    <div class="role"><?= html_escape($ttd->jabatan ?? 'Direktur'); ?></div>
 
                     <?php if (!empty($ttd) && !empty($ttd->ttd_path)): ?>
                         <img class="ttd-image" src="<?= base_url('assets/' . $ttd->ttd_path); ?>" alt="Tanda Tangan">
