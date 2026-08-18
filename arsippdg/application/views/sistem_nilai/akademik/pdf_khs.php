@@ -25,36 +25,37 @@
         }
 
         .kop-wrapper {
-            border: 1px solid #111;
             border-bottom: 2px solid #111;
-            padding: 6px 10px 4px 10px;
+            padding: 0 8px 6px 8px;
             background: #fff;
         }
 
-        .kop-table {
+        .kop-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             width: 100%;
-            border-collapse: collapse;
-        }
-
-        .kop-table td {
-            padding: 0;
-            vertical-align: middle;
         }
 
         .logo-box {
-            width: 80px;
+            width: 72px;
+            min-width: 72px;
             text-align: center;
+            margin-left: -2px;
         }
 
         .logo-box img {
-            width: 56px;
-            height: 56px;
+            width: 62px;
+            height: 62px;
+            display: block;
+            margin: 0 auto;
         }
 
         .instansi {
-            text-align: center;
-            line-height: 1.4;
+            text-align: left;
+            line-height: 1.35;
             font-weight: bold;
+            flex: 1;
         }
 
         .instansi .brand {
@@ -268,21 +269,21 @@
 <body>
     <div class="page">
         <div class="kop-wrapper">
-            <table class="kop-table">
-                <tr>
-                    <td class="logo-box"><img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek"></td>
-                    <td class="instansi">
-                        <div class="brand">POLITEKNIK DARMA GANESHA</div>
-                        <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
-                        <div class="alamat">
-                            Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
-                            Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
-                            Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
-                            Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id
-                        </div>
-                    </td>
-                </tr>
-            </table>
+            <div class="kop-header">
+                <div class="logo-box">
+                    <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek">
+                </div>
+                <div class="instansi">
+                    <div class="brand">POLITEKNIK DARMA GANESHA</div>
+                    <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
+                    <div class="alamat">
+                        Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
+                        Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
+                        Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
+                        Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="title-wrap">
@@ -304,7 +305,7 @@
             </tr>
             <tr>
                 <td class="label">Tahun Akademik</td>
-                <td class="value">: <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?> / <?= html_escape((string) (($tahun_akademik->tahun ?? 0) + 1)); ?></td>
+                <td class="value">: <?= html_escape((string) ($tahun_akademik->tahun ?? '-')); ?></td>
                 <td class="label"> </td>
                 <td> </td>
             </tr>
