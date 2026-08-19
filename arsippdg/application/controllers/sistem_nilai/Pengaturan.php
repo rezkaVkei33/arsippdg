@@ -425,11 +425,4 @@ class Pengaturan extends SistemNilai_Controller
         ]);
     }
 
-    private function require_post()
-    {
-        if ($this->input->method() !== 'post') {
-            show_404();
-        }
-    }
 }
-

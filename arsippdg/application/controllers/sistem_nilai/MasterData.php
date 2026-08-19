@@ -131,10 +131,4 @@ class MasterData extends SistemNilai_Controller
         return $program_studi;
     }
 
-    private function require_post()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            show_404();
-        }
-    }
 }

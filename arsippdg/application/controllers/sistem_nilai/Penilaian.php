@@ -181,34 +181,11 @@ class Penilaian extends SistemNilai_Controller
         $per_page = 10;
         $total_rows = $this->penilaian_model->count_all($keyword, $mata_kuliah_id);
 
-        $config = [
-            'base_url' => site_url('sistem-nilai/penilaian/daftar-nilai'),
-            'total_rows' => $total_rows,
-            'per_page' => $per_page,
-            'use_page_numbers' => TRUE,
-            'page_query_string' => TRUE,
-            'query_string_segment' => 'page',
-            'reuse_query_string' => TRUE,
-            'full_tag_open' => '<nav aria-label="Pagination"><ul class="pagination pagination-sm justify-content-center mb-0">',
-            'full_tag_close' => '</ul></nav>',
-            'first_link' => 'Awal',
-            'last_link' => 'Akhir',
-            'next_link' => '›',
-            'prev_link' => '‹',
-            'num_tag_open' => '<li class="page-item"><span class="page-link">',
-            'num_tag_close' => '</span></li>',
-            'cur_tag_open' => '<li class="page-item active"><span class="page-link">',
-            'cur_tag_close' => '</span></li>',
-            'next_tag_open' => '<li class="page-item"><span class="page-link">',
-            'next_tag_close' => '</span></li>',
-            'prev_tag_open' => '<li class="page-item"><span class="page-link">',
-            'prev_tag_close' => '</span></li>',
-            'first_tag_open' => '<li class="page-item"><span class="page-link">',
-            'first_tag_close' => '</span></li>',
-            'last_tag_open' => '<li class="page-item"><span class="page-link">',
-            'last_tag_close' => '</span></li>'
-        ];
-        $this->pagination->initialize($config);
+        $this->initialize_pagination(
+            site_url('sistem-nilai/penilaian/daftar-nilai'),
+            $total_rows,
+            $per_page
+        );
 
         $this->render('penilaian/index', [
             'title' => 'Daftar Nilai - Sistem Nilai',
@@ -227,13 +204,7 @@ class Penilaian extends SistemNilai_Controller
     public function edit($id)
     {
         $nilai = $this->get_or_404($id);
-        $this->render('penilaian/form', [
-            'title' => 'Ubah Nilai - Sistem Nilai',
-            'page_title' => 'Ubah Nilai',
-            'nilai' => $nilai,
-            'mahasiswa' => $this->penilaian_model->get_mahasiswa_detail($nilai->mahasiswa_id),
-            'penawaran' => $this->penilaian_model->get_penawaran_detail($nilai->penawaran_mk_id)
-        ]);
+        $this->render_edit_form($nilai);
     }
 
     public function update($id)
@@ -246,13 +217,7 @@ class Penilaian extends SistemNilai_Controller
         $this->form_validation->set_rules('bobot', 'Bobot', 'numeric|greater_than_equal_to[0]|less_than_equal_to[100]');
 
         if ($this->form_validation->run() === FALSE) {
-            $this->render('penilaian/form', [
-                'title' => 'Ubah Nilai - Sistem Nilai',
-                'page_title' => 'Ubah Nilai',
-                'nilai' => $nilai,
-                'mahasiswa' => $this->penilaian_model->get_mahasiswa_detail($nilai->mahasiswa_id),
-                'penawaran' => $this->penilaian_model->get_penawaran_detail($nilai->penawaran_mk_id)
-            ]);
+            $this->render_edit_form($nilai);
             return;
         }
 
@@ -326,6 +291,18 @@ class Penilaian extends SistemNilai_Controller
         return (string) (int) $semester;
     }
 
+    /** Render the edit view with the relations it requires. */
+    private function render_edit_form($nilai)
+    {
+        $this->render('penilaian/form', [
+            'title' => 'Ubah Nilai - Sistem Nilai',
+            'page_title' => 'Ubah Nilai',
+            'nilai' => $nilai,
+            'mahasiswa' => $this->penilaian_model->get_mahasiswa_detail($nilai->mahasiswa_id),
+            'penawaran' => $this->penilaian_model->get_penawaran_detail($nilai->penawaran_mk_id)
+        ]);
+    }
+
     private function get_or_404($id)
     {
         $nilai = $this->penilaian_model->get_by_id($id);
@@ -336,10 +313,4 @@ class Penilaian extends SistemNilai_Controller
         return $nilai;
     }
 
-    private function require_post()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            show_404();
-        }
-    }
 }

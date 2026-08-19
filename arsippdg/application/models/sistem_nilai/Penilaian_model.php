@@ -9,25 +9,11 @@ class Penilaian_model extends CI_Model
     {
         $this->db
             ->select('ak_nilai.*, ak_mahasiswa.nim, ak_mahasiswa.nama, ak_program_studi.nama_prodi, ak_mata_kuliah.kode_mk, ak_mata_kuliah.nama_mk, ak_tahun_akademik.tahun, ak_tahun_akademik.semester')
-            ->from($this->table)
-            ->join('ak_mahasiswa', 'ak_mahasiswa.id = ak_nilai.mahasiswa_id', 'left')
-            ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'left')
-            ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'left')
-            ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left')
-            ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left');
+            ->from($this->table);
 
-        if ($keyword !== '') {
-            $this->db->group_start()
-                ->like('ak_mahasiswa.nim', $keyword)
-                ->or_like('ak_mahasiswa.nama', $keyword)
-                ->or_like('ak_mata_kuliah.nama_mk', $keyword)
-                ->or_like('ak_program_studi.nama_prodi', $keyword)
-            ->group_end();
-        }
-
-        if ($mata_kuliah_id !== NULL && $mata_kuliah_id !== '' && $mata_kuliah_id !== 'all') {
-            $this->db->where('ak_penawaran_mk.mata_kuliah_id', (int) $mata_kuliah_id);
-        }
+        $this->apply_listing_joins();
+        $this->db->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left');
+        $this->apply_listing_filters($keyword, $mata_kuliah_id);
 
         if ($limit !== NULL) {
             $this->db->limit((int) $limit, (int) $offset);
@@ -38,25 +24,9 @@ class Penilaian_model extends CI_Model
 
     public function count_all($keyword = '', $mata_kuliah_id = NULL)
     {
-        $this->db
-            ->from($this->table)
-            ->join('ak_mahasiswa', 'ak_mahasiswa.id = ak_nilai.mahasiswa_id', 'left')
-            ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'left')
-            ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'left')
-            ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left');
-
-        if ($keyword !== '') {
-            $this->db->group_start()
-                ->like('ak_mahasiswa.nim', $keyword)
-                ->or_like('ak_mahasiswa.nama', $keyword)
-                ->or_like('ak_mata_kuliah.nama_mk', $keyword)
-                ->or_like('ak_program_studi.nama_prodi', $keyword)
-            ->group_end();
-        }
-
-        if ($mata_kuliah_id !== NULL && $mata_kuliah_id !== '' && $mata_kuliah_id !== 'all') {
-            $this->db->where('ak_penawaran_mk.mata_kuliah_id', (int) $mata_kuliah_id);
-        }
+        $this->db->from($this->table);
+        $this->apply_listing_joins();
+        $this->apply_listing_filters($keyword, $mata_kuliah_id);
 
         return (int) $this->db->count_all_results();
     }
@@ -154,5 +124,32 @@ class Penilaian_model extends CI_Model
             ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left')
             ->where('ak_penawaran_mk.id', (int) $id)
             ->get()->row();
+    }
+
+    /** Add the relations shared by the grade list and its total query. */
+    private function apply_listing_joins()
+    {
+        $this->db
+            ->join('ak_mahasiswa', 'ak_mahasiswa.id = ak_nilai.mahasiswa_id', 'left')
+            ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'left')
+            ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'left')
+            ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left');
+    }
+
+    /** Apply the same search constraints to the grade list and its total. */
+    private function apply_listing_filters($keyword, $mata_kuliah_id)
+    {
+        if ($keyword !== '') {
+            $this->db->group_start()
+                ->like('ak_mahasiswa.nim', $keyword)
+                ->or_like('ak_mahasiswa.nama', $keyword)
+                ->or_like('ak_mata_kuliah.nama_mk', $keyword)
+                ->or_like('ak_program_studi.nama_prodi', $keyword)
+            ->group_end();
+        }
+
+        if ($mata_kuliah_id !== NULL && $mata_kuliah_id !== '' && $mata_kuliah_id !== 'all') {
+            $this->db->where('ak_penawaran_mk.mata_kuliah_id', (int) $mata_kuliah_id);
+        }
     }
 }

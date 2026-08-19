@@ -25,34 +25,11 @@ class Mahasiswa extends SistemNilai_Controller
         $per_page = 10;
         $total_rows = $this->mahasiswa_model->count_all($keyword, $selected_prodi);
 
-        $config = [
-            'base_url' => site_url('sistem-nilai/master-data/mahasiswa'),
-            'total_rows' => $total_rows,
-            'per_page' => $per_page,
-            'use_page_numbers' => TRUE,
-            'page_query_string' => TRUE,
-            'query_string_segment' => 'page',
-            'reuse_query_string' => TRUE,
-            'full_tag_open' => '<nav aria-label="Pagination"><ul class="pagination pagination-sm justify-content-center mb-0">',
-            'full_tag_close' => '</ul></nav>',
-            'first_link' => 'Awal',
-            'last_link' => 'Akhir',
-            'next_link' => '›',
-            'prev_link' => '‹',
-            'num_tag_open' => '<li class="page-item"><span class="page-link">',
-            'num_tag_close' => '</span></li>',
-            'cur_tag_open' => '<li class="page-item active"><span class="page-link">',
-            'cur_tag_close' => '</span></li>',
-            'next_tag_open' => '<li class="page-item"><span class="page-link">',
-            'next_tag_close' => '</span></li>',
-            'prev_tag_open' => '<li class="page-item"><span class="page-link">',
-            'prev_tag_close' => '</span></li>',
-            'first_tag_open' => '<li class="page-item"><span class="page-link">',
-            'first_tag_close' => '</span></li>',
-            'last_tag_open' => '<li class="page-item"><span class="page-link">',
-            'last_tag_close' => '</span></li>'
-        ];
-        $this->pagination->initialize($config);
+        $this->initialize_pagination(
+            site_url('sistem-nilai/master-data/mahasiswa'),
+            $total_rows,
+            $per_page
+        );
 
         $offset = ($page - 1) * $per_page;
 
@@ -241,10 +218,4 @@ class Mahasiswa extends SistemNilai_Controller
         return $mahasiswa;
     }
 
-    private function require_post()
-    {
-        if (strtoupper($this->input->method()) !== 'POST') {
-            show_404();
-        }
-    }
 }
