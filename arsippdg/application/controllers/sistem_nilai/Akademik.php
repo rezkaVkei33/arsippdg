@@ -26,7 +26,7 @@ class Akademik extends SistemNilai_Controller
             'riwayat' => $this->akademik_model->get_riwayat_akademik($tahun_id, $semester),
             'selected_tahun_id' => $tahun_id,
             'selected_semester' => $semester,
-            'tahun_akademik_options' => $this->db->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(),
+            'tahun_akademik_options' => $this->db->where('status', 'Aktif')->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(),
             'semester_options' => ['Ganjil' => 'Ganjil', 'Genap' => 'Genap']
         ];
 
@@ -103,6 +103,10 @@ class Akademik extends SistemNilai_Controller
         }
 
         $tahun = $this->akademik_model->get_tahun_akademik_by_id($tahun_akademik_id);
+        if (!$tahun) {
+            show_404();
+        }
+
         $khs_rows = $this->akademik_model->get_khs_by_mahasiswa($mahasiswa_id, $tahun_akademik_id, $tahun ? $tahun->semester : NULL);
 
         $total_sks = 0;

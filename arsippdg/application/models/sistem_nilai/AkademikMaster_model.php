@@ -44,6 +44,8 @@ class AkademikMaster_model extends CI_Model
                 $this->db->group_start()->like('ak_mata_kuliah.kode_mk', $keyword)->or_like('ak_mata_kuliah.nama_mk', $keyword)->or_like('ak_tahun_akademik.tahun', $keyword)->group_end();
             }
 
+            $this->db->where('ak_tahun_akademik.status', 'Aktif');
+
             if ($filter_value !== NULL && $filter_value !== '' && $filter_value !== 'all' && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
                 $this->db->where('ak_mata_kuliah.program_studi_id', (int) $filter_value);
             }
@@ -68,11 +70,11 @@ class AkademikMaster_model extends CI_Model
         }
     }
 
-    public function get($type, $id) { return $this->db->where('id', (int) $id)->get($this->table($type))->row(); }
+    public function get($type, $id) { if ($type === 'penawaran-mata-kuliah') { return $this->db->select('ak_penawaran_mk.*')->from('ak_penawaran_mk')->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'inner')->where('ak_penawaran_mk.id', (int) $id)->where('ak_tahun_akademik.status', 'Aktif')->get()->row(); } return $this->db->where('id', (int) $id)->get($this->table($type))->row(); }
     public function save($type, array $data, $id = NULL) { return $id === NULL ? $this->db->insert($this->table($type), $data) : $this->db->where('id', (int) $id)->update($this->table($type), $data); }
     public function delete($type, $id) { return $this->db->where('id', (int) $id)->delete($this->table($type)); }
     public function exists($type, array $where, $except = NULL) { $this->db->where($where); if ($except) $this->db->where('id !=', (int) $except); return $this->db->count_all_results($this->table($type)) > 0; }
     public function mata_kuliah() { return $this->db->where('status', 'Aktif')->order_by('semester', 'ASC')->order_by('kode_mk', 'ASC')->get('ak_mata_kuliah')->result(); }
     public function mata_kuliah_semester_options() { return $this->db->select('semester')->from('ak_mata_kuliah')->where('semester IS NOT NULL')->group_by('semester')->order_by('semester', 'ASC')->get()->result(); }
-    public function tahun_akademik() { return $this->db->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(); }
+    public function tahun_akademik() { return $this->db->where('status', 'Aktif')->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(); }
 }

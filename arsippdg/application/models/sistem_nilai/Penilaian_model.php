@@ -12,7 +12,6 @@ class Penilaian_model extends CI_Model
             ->from($this->table);
 
         $this->apply_listing_joins();
-        $this->db->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left');
         $this->apply_listing_filters($keyword, $mata_kuliah_id, $program_studi_id);
 
         if ($limit !== NULL) {
@@ -33,7 +32,15 @@ class Penilaian_model extends CI_Model
 
     public function get_by_id($id)
     {
-        return $this->db->where('id', (int) $id)->get($this->table)->row();
+        return $this->db
+            ->select('ak_nilai.*')
+            ->from($this->table)
+            ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'inner')
+            ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'inner')
+            ->where('ak_nilai.id', (int) $id)
+            ->where('ak_tahun_akademik.status', 'Aktif')
+            ->get()
+            ->row();
     }
 
     public function insert(array $data)
@@ -66,9 +73,11 @@ class Penilaian_model extends CI_Model
             ->from($this->table)
             ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'inner')
             ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'inner')
+            ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'inner')
             ->where('ak_nilai.mahasiswa_id', (int) $mahasiswa_id)
             ->where('ak_penawaran_mk.tahun_akademik_id', (int) $tahun_akademik_id)
             ->where('ak_mata_kuliah.semester', (int) $semester)
+            ->where('ak_tahun_akademik.status', 'Aktif')
             ->get()
             ->result();
 
@@ -104,6 +113,8 @@ class Penilaian_model extends CI_Model
             ->select('ak_penawaran_mk.*')
             ->from('ak_penawaran_mk')
             ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left')
+            ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'inner')
+            ->where('ak_tahun_akademik.status', 'Aktif')
             ->where('ak_penawaran_mk.tahun_akademik_id', (int) $tahun_akademik_id);
 
         if ($semester !== NULL && $semester !== '') {
@@ -163,7 +174,8 @@ class Penilaian_model extends CI_Model
             ->join('ak_mahasiswa', 'ak_mahasiswa.id = ak_nilai.mahasiswa_id', 'left')
             ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'left')
             ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'left')
-            ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left');
+            ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'left')
+            ->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'inner');
     }
 
     /** Apply the same search constraints to the grade list and its total. */
@@ -185,5 +197,7 @@ class Penilaian_model extends CI_Model
         if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== 'all') {
             $this->db->where('ak_mahasiswa.program_studi_id', (int) $program_studi_id);
         }
+
+        $this->db->where('ak_tahun_akademik.status', 'Aktif');
     }
 }

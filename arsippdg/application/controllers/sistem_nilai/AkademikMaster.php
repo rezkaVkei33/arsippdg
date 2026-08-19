@@ -14,6 +14,7 @@ class AkademikMaster extends SistemNilai_Controller
     public function store($type) { $this->persist($type); }
     public function update($type, $id) { $this->persist($type, $id); }
     public function delete($type, $id) { $this->post_only(); $this->find($type, $id); $this->master_model->delete($type, $id); $this->session->set_flashdata('success', $this->label($type) . ' berhasil dihapus'); redirect($this->base($type)); }
+    public function toggle_tahun_akademik_status($id) { $this->post_only(); $tahun_akademik = $this->find('tahun-akademik', $id); $status = $tahun_akademik->status === 'Aktif' ? 'Nonaktif' : 'Aktif'; $this->master_model->save('tahun-akademik', ['status' => $status], $id); $this->session->set_flashdata('success', 'Tahun akademik berhasil ' . strtolower($status) . '.'); redirect($this->base('tahun-akademik')); }
     private function listing($type) {
         $q = trim((string) $this->input->get('q', TRUE));
         $selected_prodi = trim((string) $this->input->get('prodi', TRUE));

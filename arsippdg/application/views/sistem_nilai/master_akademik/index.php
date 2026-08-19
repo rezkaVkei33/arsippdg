@@ -74,7 +74,7 @@
                                     <?php if($type==='tahun-akademik'): ?>
                                         <td><?= html_escape($i->tahun.' / '.$i->semester); ?></td>
                                         <td><?= html_escape(($i->tanggal_mulai?:'-').' s.d. '.($i->tanggal_selesai?:'-')); ?></td>
-                                        <td><?= html_escape($i->status); ?></td>
+                                        <td><span class="badge <?= $i->status === 'Aktif' ? 'bg-success' : 'bg-secondary'; ?>"><?= html_escape($i->status); ?></span></td>
                                     <?php elseif($type==='mata-kuliah'): ?>
                                         <td><?= html_escape($i->kode_mk); ?></td>
                                         <td><?= html_escape($i->nama_mk); ?></td>
@@ -86,6 +86,11 @@
                                         <td><?= html_escape($i->tahun.' / '.$i->semester); ?></td>
                                     <?php endif; ?>
                                     <td class="text-end">
+                                        <?php if ($type === 'tahun-akademik'): ?>
+                                            <form class="d-inline" method="post" action="<?= site_url('sistem-nilai/master-data/tahun-akademik/toggle-status/' . $i->id); ?>">
+                                                <button type="submit" class="btn btn-sm <?= $i->status === 'Aktif' ? 'btn-outline-warning' : 'btn-outline-success'; ?>"><?= $i->status === 'Aktif' ? 'Nonaktifkan' : 'Aktifkan'; ?></button>
+                                            </form>
+                                        <?php endif; ?>
                                         <a class="btn btn-sm btn-outline-primary" href="<?= site_url('sistem-nilai/master-data/'.$type.'/ubah/'.$i->id); ?>">Ubah</a>
                                         <form class="d-inline delete-form" method="post" action="<?= site_url('sistem-nilai/master-data/'.$type.'/hapus/'.$i->id); ?>" data-delete-confirm="Data <?= strtolower(html_escape($label)); ?> ini akan dihapus. Jika ada data terkait, data tersebut juga akan ikut terhapus.">
                                             <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
