@@ -60,7 +60,7 @@
                         <select name="mata_kuliah_id" id="mata_kuliah_id" class="form-select" required>
                             <option value="">Pilih Mata Kuliah</option>
                             <?php foreach ($mata_kuliah_options as $item): ?>
-                                <option value="<?= (int) $item->id; ?>"><?= html_escape($item->kode_mk . ' - ' . $item->nama_mk); ?></option>
+                                <option value="<?= (int) $item->id; ?>"><?= html_escape($item->semester . ' - ' . $item->kode_mk . ' - ' . $item->nama_mk); ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>

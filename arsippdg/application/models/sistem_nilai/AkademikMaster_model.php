@@ -11,9 +11,9 @@ class AkademikMaster_model extends CI_Model
 
     private function table($type) { return $this->tables[$type]; }
 
-    public function get_all($type, $keyword = '', $program_studi_id = NULL, $limit = NULL, $offset = 0)
+    public function get_all($type, $keyword = '', $filter_value = NULL, $limit = NULL, $offset = 0)
     {
-        $this->build_query($type, $keyword, $program_studi_id);
+        $this->build_query($type, $keyword, $filter_value);
 
         if ($limit !== NULL) {
             $this->db->limit((int) $limit, (int) $offset);
@@ -26,13 +26,13 @@ class AkademikMaster_model extends CI_Model
         return $this->db->order_by('id', 'DESC')->get()->result();
     }
 
-    public function count_all($type, $keyword = '', $program_studi_id = NULL)
+    public function count_all($type, $keyword = '', $filter_value = NULL)
     {
-        $this->build_query($type, $keyword, $program_studi_id);
+        $this->build_query($type, $keyword, $filter_value);
         return (int) $this->db->count_all_results();
     }
 
-    private function build_query($type, $keyword = '', $program_studi_id = NULL)
+    private function build_query($type, $keyword = '', $filter_value = NULL)
     {
         if ($type === 'penawaran-mata-kuliah') {
             $this->db->select('ak_penawaran_mk.*, ak_mata_kuliah.kode_mk, ak_mata_kuliah.nama_mk, ak_tahun_akademik.tahun, ak_tahun_akademik.semester')
@@ -44,8 +44,8 @@ class AkademikMaster_model extends CI_Model
                 $this->db->group_start()->like('ak_mata_kuliah.kode_mk', $keyword)->or_like('ak_mata_kuliah.nama_mk', $keyword)->or_like('ak_tahun_akademik.tahun', $keyword)->group_end();
             }
 
-            if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== 'all' && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
-                $this->db->where('ak_mata_kuliah.program_studi_id', (int) $program_studi_id);
+            if ($filter_value !== NULL && $filter_value !== '' && $filter_value !== 'all' && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
+                $this->db->where('ak_mata_kuliah.program_studi_id', (int) $filter_value);
             }
             return;
         }
@@ -57,8 +57,8 @@ class AkademikMaster_model extends CI_Model
                 $this->db->group_start()->like('kode_mk', $keyword)->or_like('nama_mk', $keyword)->group_end();
             }
 
-            if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== 'all' && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
-                $this->db->where('program_studi_id', (int) $program_studi_id);
+            if ($filter_value !== NULL && $filter_value !== '' && $filter_value !== 'all') {
+                $this->db->where('semester', (int) $filter_value);
             }
             return;
         }
@@ -72,6 +72,7 @@ class AkademikMaster_model extends CI_Model
     public function save($type, array $data, $id = NULL) { return $id === NULL ? $this->db->insert($this->table($type), $data) : $this->db->where('id', (int) $id)->update($this->table($type), $data); }
     public function delete($type, $id) { return $this->db->where('id', (int) $id)->delete($this->table($type)); }
     public function exists($type, array $where, $except = NULL) { $this->db->where($where); if ($except) $this->db->where('id !=', (int) $except); return $this->db->count_all_results($this->table($type)) > 0; }
-    public function mata_kuliah() { return $this->db->where('status', 'Aktif')->order_by('nama_mk')->get('ak_mata_kuliah')->result(); }
+    public function mata_kuliah() { return $this->db->where('status', 'Aktif')->order_by('semester', 'ASC')->order_by('kode_mk', 'ASC')->get('ak_mata_kuliah')->result(); }
+    public function mata_kuliah_semester_options() { return $this->db->select('semester')->from('ak_mata_kuliah')->where('semester IS NOT NULL')->group_by('semester')->order_by('semester', 'ASC')->get()->result(); }
     public function tahun_akademik() { return $this->db->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(); }
 }

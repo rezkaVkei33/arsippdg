@@ -12,18 +12,26 @@
                 <div class="col-sm-6 col-md-5">
                     <input type="search" name="q" class="form-control" value="<?= html_escape($keyword); ?>" placeholder="Cari NIM, nama, atau mata kuliah">
                 </div>
-                <div class="col-sm-6 col-md-4">
+                <div class="col-sm-6 col-md-3">
+                    <select name="prodi" class="form-select">
+                        <option value="">Semua Program Studi</option>
+                        <?php foreach ($program_studi_options as $item): ?>
+                            <option value="<?= (int) $item->id; ?>" <?= (string) $selected_prodi === (string) $item->id ? 'selected' : ''; ?>><?= html_escape($item->nama_prodi); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="col-sm-6 col-md-3">
                     <select name="mata_kuliah" class="form-select">
                         <option value="">Semua Mata Kuliah</option>
                         <?php foreach ($mata_kuliah_options as $item): ?>
-                            <option value="<?= (int) $item->id; ?>" <?= (string) $selected_mata_kuliah === (string) $item->id ? 'selected' : ''; ?>><?= html_escape($item->kode_mk . ' - ' . $item->nama_mk); ?></option>
+                            <option value="<?= (int) $item->id; ?>" <?= (string) $selected_mata_kuliah === (string) $item->id ? 'selected' : ''; ?>><?= html_escape($item->semester . ' - ' . $item->kode_mk . ' - ' . $item->nama_mk); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="col-auto">
                     <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i> Cari</button>
                 </div>
-                <?php if ($keyword !== '' || $selected_mata_kuliah !== ''): ?>
+                <?php if ($keyword !== '' || $selected_mata_kuliah !== '' || $selected_prodi !== ''): ?>
                     <div class="col-auto">
                         <a href="<?= site_url('sistem-nilai/penilaian/daftar-nilai'); ?>" class="btn btn-outline-secondary">Reset</a>
                     </div>

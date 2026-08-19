@@ -26,6 +26,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= site_url('sistem-nilai/penilaian/upload-nilai'); ?>"><i class="bi bi-cloud-arrow-up"></i> Upload Nilai</a></li>
                         <li><a class="dropdown-item" href="<?= site_url('sistem-nilai/penilaian/daftar-nilai'); ?>"><i class="bi bi-clipboard-data"></i> Daftar Nilai</a></li>
+                        <li><a class="dropdown-item text-danger" href="<?= site_url('sistem-nilai/penilaian/hapus-nilai'); ?>"><i class="bi bi-trash"></i> Hapus Nilai</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

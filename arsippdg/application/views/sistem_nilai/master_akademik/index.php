@@ -13,7 +13,16 @@
                 <div class="col-md-6">
                     <input class="form-control" name="q" value="<?= html_escape($keyword); ?>" placeholder="Cari data">
                 </div>
-                <?php if ($type !== 'tahun-akademik'): ?>
+                <?php if ($type === 'mata-kuliah'): ?>
+                    <div class="col-md-4">
+                        <select name="semester" class="form-select">
+                            <option value="">Semua Semester</option>
+                            <?php foreach ($semester_options as $item): ?>
+                                <option value="<?= (int) $item->semester; ?>" <?= (string) $selected_semester === (string) $item->semester ? 'selected' : ''; ?>>Semester <?= html_escape($item->semester); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                <?php elseif ($type === 'penawaran-mata-kuliah'): ?>
                     <div class="col-md-4">
                         <select name="prodi" class="form-select">
                             <option value="">Semua Program Studi</option>
@@ -26,7 +35,7 @@
                 <div class="col-auto">
                     <button class="btn btn-outline-success" type="submit">Cari</button>
                 </div>
-                <?php if ($keyword !== '' || ($type !== 'tahun-akademik' && $selected_prodi !== '')): ?>
+                <?php if ($keyword !== '' || ($type === 'mata-kuliah' && $selected_semester !== '') || ($type === 'penawaran-mata-kuliah' && $selected_prodi !== '')): ?>
                     <div class="col-auto">
                         <a href="<?= site_url('sistem-nilai/master-data/'.$type); ?>" class="btn btn-outline-secondary">Reset</a>
                     </div>

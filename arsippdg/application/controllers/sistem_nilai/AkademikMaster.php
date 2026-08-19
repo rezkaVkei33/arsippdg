@@ -17,9 +17,11 @@ class AkademikMaster extends SistemNilai_Controller
     private function listing($type) {
         $q = trim((string) $this->input->get('q', TRUE));
         $selected_prodi = trim((string) $this->input->get('prodi', TRUE));
+        $selected_semester = trim((string) $this->input->get('semester', TRUE));
+        $filter_value = $type === 'mata-kuliah' ? $selected_semester : $selected_prodi;
         $page = max(1, (int) $this->input->get('page', TRUE));
         $per_page = 10;
-        $total_rows = $this->master_model->count_all($type, $q, $selected_prodi);
+        $total_rows = $this->master_model->count_all($type, $q, $filter_value);
 
         $config = [
             'base_url' => site_url('sistem-nilai/master-data/' . $type),
@@ -54,10 +56,12 @@ class AkademikMaster extends SistemNilai_Controller
             'title' => $this->label($type) . ' - Sistem Nilai',
             'type' => $type,
             'label' => $this->label($type),
-            'items' => $this->master_model->get_all($type, $q, $selected_prodi, $per_page, ($page - 1) * $per_page),
+            'items' => $this->master_model->get_all($type, $q, $filter_value, $per_page, ($page - 1) * $per_page),
             'keyword' => $q,
             'selected_prodi' => $selected_prodi,
+            'selected_semester' => $selected_semester,
             'program_studi_options' => $this->program_studi_model->get_all(),
+            'semester_options' => $this->master_model->mata_kuliah_semester_options(),
             'pagination' => $this->pagination,
             'total_rows' => $total_rows,
             'current_page' => $page,

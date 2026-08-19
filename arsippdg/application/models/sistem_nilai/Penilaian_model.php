@@ -5,7 +5,7 @@ class Penilaian_model extends CI_Model
 {
     private $table = 'ak_nilai';
 
-    public function get_all($keyword = '', $mata_kuliah_id = NULL, $limit = NULL, $offset = 0)
+    public function get_all($keyword = '', $mata_kuliah_id = NULL, $program_studi_id = NULL, $limit = NULL, $offset = 0)
     {
         $this->db
             ->select('ak_nilai.*, ak_mahasiswa.nim, ak_mahasiswa.nama, ak_program_studi.nama_prodi, ak_mata_kuliah.kode_mk, ak_mata_kuliah.nama_mk, ak_tahun_akademik.tahun, ak_tahun_akademik.semester')
@@ -13,7 +13,7 @@ class Penilaian_model extends CI_Model
 
         $this->apply_listing_joins();
         $this->db->join('ak_tahun_akademik', 'ak_tahun_akademik.id = ak_penawaran_mk.tahun_akademik_id', 'left');
-        $this->apply_listing_filters($keyword, $mata_kuliah_id);
+        $this->apply_listing_filters($keyword, $mata_kuliah_id, $program_studi_id);
 
         if ($limit !== NULL) {
             $this->db->limit((int) $limit, (int) $offset);
@@ -22,11 +22,11 @@ class Penilaian_model extends CI_Model
         return $this->db->order_by('ak_nilai.id', 'DESC')->get()->result();
     }
 
-    public function count_all($keyword = '', $mata_kuliah_id = NULL)
+    public function count_all($keyword = '', $mata_kuliah_id = NULL, $program_studi_id = NULL)
     {
         $this->db->from($this->table);
         $this->apply_listing_joins();
-        $this->apply_listing_filters($keyword, $mata_kuliah_id);
+        $this->apply_listing_filters($keyword, $mata_kuliah_id, $program_studi_id);
 
         return (int) $this->db->count_all_results();
     }
@@ -53,6 +53,36 @@ class Penilaian_model extends CI_Model
     public function delete($id)
     {
         return $this->db->where('id', (int) $id)->delete($this->table);
+    }
+
+    /**
+     * Delete all of one student's grades for an academic year and course semester.
+     * The caller owns the surrounding transaction.
+     */
+    public function delete_by_mahasiswa_and_period($mahasiswa_id, $tahun_akademik_id, $semester)
+    {
+        $rows = $this->db
+            ->select('ak_nilai.id')
+            ->from($this->table)
+            ->join('ak_penawaran_mk', 'ak_penawaran_mk.id = ak_nilai.penawaran_mk_id', 'inner')
+            ->join('ak_mata_kuliah', 'ak_mata_kuliah.id = ak_penawaran_mk.mata_kuliah_id', 'inner')
+            ->where('ak_nilai.mahasiswa_id', (int) $mahasiswa_id)
+            ->where('ak_penawaran_mk.tahun_akademik_id', (int) $tahun_akademik_id)
+            ->where('ak_mata_kuliah.semester', (int) $semester)
+            ->get()
+            ->result();
+
+        if (empty($rows)) {
+            return 0;
+        }
+
+        $nilai_ids = array_map(function ($row) {
+            return (int) $row->id;
+        }, $rows);
+
+        $this->db->where_in('id', $nilai_ids)->delete($this->table);
+
+        return $this->db->affected_rows();
     }
 
     public function get_students_for_upload($program_studi_id, $tahun_akademik_id, $semester, $angkatan)
@@ -137,7 +167,7 @@ class Penilaian_model extends CI_Model
     }
 
     /** Apply the same search constraints to the grade list and its total. */
-    private function apply_listing_filters($keyword, $mata_kuliah_id)
+    private function apply_listing_filters($keyword, $mata_kuliah_id, $program_studi_id)
     {
         if ($keyword !== '') {
             $this->db->group_start()
@@ -150,6 +180,10 @@ class Penilaian_model extends CI_Model
 
         if ($mata_kuliah_id !== NULL && $mata_kuliah_id !== '' && $mata_kuliah_id !== 'all') {
             $this->db->where('ak_penawaran_mk.mata_kuliah_id', (int) $mata_kuliah_id);
+        }
+
+        if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== 'all') {
+            $this->db->where('ak_mahasiswa.program_studi_id', (int) $program_studi_id);
         }
     }
 }

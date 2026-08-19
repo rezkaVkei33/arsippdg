@@ -10,6 +10,7 @@ class Penilaian extends SistemNilai_Controller
         parent::__construct();
         $this->load->model('sistem_nilai/Penilaian_model', 'penilaian_model');
         $this->load->model('sistem_nilai/ProgramStudi_model', 'program_studi_model');
+        $this->load->model('sistem_nilai/Mahasiswa_model', 'mahasiswa_model');
         $this->load->model('sistem_nilai/AkademikMaster_model', 'master_model');
         $this->load->model('sistem_nilai/Grade_model', 'grade_model');
         $this->load->library(['form_validation', 'pagination', 'Nilai_excel']);
@@ -177,9 +178,10 @@ class Penilaian extends SistemNilai_Controller
     {
         $keyword = trim((string) $this->input->get('q', TRUE));
         $mata_kuliah_id = trim((string) $this->input->get('mata_kuliah', TRUE));
+        $program_studi_id = trim((string) $this->input->get('prodi', TRUE));
         $page = max(1, (int) $this->input->get('page', TRUE));
         $per_page = 10;
-        $total_rows = $this->penilaian_model->count_all($keyword, $mata_kuliah_id);
+        $total_rows = $this->penilaian_model->count_all($keyword, $mata_kuliah_id, $program_studi_id);
 
         $this->initialize_pagination(
             site_url('sistem-nilai/penilaian/daftar-nilai'),
@@ -190,15 +192,71 @@ class Penilaian extends SistemNilai_Controller
         $this->render('penilaian/index', [
             'title' => 'Daftar Nilai - Sistem Nilai',
             'page_title' => 'Daftar Nilai',
-            'nilai' => $this->penilaian_model->get_all($keyword, $mata_kuliah_id, $per_page, ($page - 1) * $per_page),
+            'nilai' => $this->penilaian_model->get_all($keyword, $mata_kuliah_id, $program_studi_id, $per_page, ($page - 1) * $per_page),
             'keyword' => $keyword,
             'selected_mata_kuliah' => $mata_kuliah_id,
+            'selected_prodi' => $program_studi_id,
             'mata_kuliah_options' => $this->master_model->mata_kuliah(),
+            'program_studi_options' => $this->program_studi_model->get_all(),
             'pagination' => $this->pagination,
             'total_rows' => $total_rows,
             'current_page' => $page,
             'per_page' => $per_page
         ]);
+    }
+
+    /** Display the bulk deletion form for a student's grades in one period. */
+    public function hapus_nilai()
+    {
+        $this->render('penilaian/hapus_nilai', [
+            'title' => 'Hapus Nilai - Sistem Nilai',
+            'page_title' => 'Hapus Nilai Mahasiswa',
+            'mahasiswa_options' => $this->mahasiswa_model->get_all(),
+            'tahun_akademik_options' => $this->master_model->tahun_akademik(),
+            'semester_options' => ['1' => 'Semester 1', '2' => 'Semester 2']
+        ]);
+    }
+
+    /** Delete all grades that match the selected student, academic year, and semester. */
+    public function proses_hapus_nilai()
+    {
+        $this->require_post();
+
+        $mahasiswa_id = (int) $this->input->post('mahasiswa_id', TRUE);
+        $tahun_akademik_id = (int) $this->input->post('tahun_akademik_id', TRUE);
+        $semester = $this->normalize_semester($this->input->post('semester', TRUE));
+
+        if ($mahasiswa_id <= 0 || $tahun_akademik_id <= 0 || !in_array($semester, ['1', '2'], TRUE)) {
+            $this->session->set_flashdata('error', 'Pilih mahasiswa, tahun akademik, dan semester terlebih dahulu.');
+            redirect('sistem-nilai/penilaian/hapus-nilai');
+        }
+
+        if (!$this->mahasiswa_model->get_by_id($mahasiswa_id)) {
+            show_404();
+        }
+
+        $this->db->trans_begin();
+        $deleted_rows = $this->penilaian_model->delete_by_mahasiswa_and_period(
+            $mahasiswa_id,
+            $tahun_akademik_id,
+            $semester
+        );
+
+        if ($this->db->trans_status() === FALSE) {
+            $this->db->trans_rollback();
+            $this->session->set_flashdata('error', 'Nilai gagal dihapus. Silakan coba kembali.');
+            redirect('sistem-nilai/penilaian/hapus-nilai');
+        }
+
+        $this->db->trans_commit();
+
+        if ($deleted_rows === 0) {
+            $this->session->set_flashdata('warning', 'Tidak ada data nilai yang sesuai dengan pilihan tersebut.');
+        } else {
+            $this->session->set_flashdata('success', $deleted_rows . ' data nilai mahasiswa berhasil dihapus.');
+        }
+
+        redirect('sistem-nilai/penilaian/hapus-nilai');
     }
 
     public function edit($id)
