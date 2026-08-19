@@ -35,8 +35,8 @@
                 </td>
                 <td class="text-center">
                     <form method="post" action="<?= site_url('sistem-nilai/pengaturan/tanda-tangan/toggle-status/' . $row->id); ?>" class="d-inline">
-                        <button type="submit" class="btn btn-sm <?= $row->status === 1 ? 'btn-success' : 'btn-secondary'; ?>" title="Klik untuk mengubah status">
-                            <?= $row->status === 1 ? '<i class="bi bi-check-circle"></i> Aktif' : '<i class="bi bi-x-circle"></i> Nonaktif'; ?>
+                        <button type="submit" class="btn btn-sm <?= (int) $row->status === 1 ? 'btn-success' : 'btn-secondary'; ?>" title="Klik untuk mengubah status">
+                            <?= (int) $row->status === 1 ? '<i class="bi bi-check-circle"></i> Aktif' : '<i class="bi bi-x-circle"></i> Nonaktif'; ?>
                         </button>
                     </form>
                 </td>

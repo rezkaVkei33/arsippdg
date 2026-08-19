@@ -365,7 +365,7 @@ class Pengaturan extends SistemNilai_Controller
         $this->form_validation->set_rules('nama_pejabat', 'Nama Pejabat', 'required|max_length[150]');
         $this->form_validation->set_rules('nomor_induk', 'Nomor Induk', 'max_length[50]');
         $this->form_validation->set_rules('jabatan', 'Jabatan', 'required|max_length[100]');
-        $this->form_validation->set_rules('tanggal_ttd', 'Tanggal Tanda Tangan', 'required|valid_date');
+        $this->form_validation->set_rules('tanggal_ttd', 'Tanggal Tanda Tangan', 'required|callback_valid_ttd_date');
         $this->form_validation->set_rules('status', 'Status', 'required|in_list[0,1]');
 
         if ($require_ttd && empty($_FILES['ttd_file']['name'])) {
@@ -374,6 +374,19 @@ class Pengaturan extends SistemNilai_Controller
         }
 
         return $this->form_validation->run();
+    }
+
+    /** Validate the YYYY-MM-DD value emitted by the HTML date input. */
+    public function valid_ttd_date($date)
+    {
+        $parsed = DateTime::createFromFormat('Y-m-d', (string) $date);
+        $is_valid = $parsed && $parsed->format('Y-m-d') === $date;
+
+        if (!$is_valid) {
+            $this->form_validation->set_message('valid_ttd_date', 'Format {field} tidak valid.');
+        }
+
+        return $is_valid;
     }
 
     private function handle_file_upload($input_name, $folder)

@@ -237,6 +237,13 @@
             display: block;
         }
 
+        .cap-image {
+            margin: 0 auto 6px auto;
+            max-width: 90px;
+            max-height: 75px;
+            display: block;
+        }
+
         .stamp-wrap {
             width: 130px;
             height: 90px;
@@ -413,19 +420,20 @@
             <div class="summary-right">
                 <div class="signature-box">
                     <div class="date">Belitung, <?= html_escape(!empty($ttd->tanggal_ttd) ? date('d F Y', strtotime($ttd->tanggal_ttd)) : $tanggal_update); ?></div>
-                    <div class="role"><?= html_escape($ttd->jabatan ?? 'Direktur'); ?></div>
+                    <div class="role"><?= html_escape($ttd->jabatan ?? '-'); ?></div>
 
-                    <?php if (!empty($ttd) && !empty($ttd->ttd_path)): ?>
-                        <img class="ttd-image" src="<?= base_url('assets/' . $ttd->ttd_path); ?>" alt="Tanda Tangan">
+                    <?php if (!empty($ttd) && !empty($ttd->ttd_data_uri)): ?>
+                        <img class="ttd-image" src="<?= $ttd->ttd_data_uri; ?>" alt="Tanda Tangan">
                     <?php else: ?>
-                        <div class="stamp-wrap">
-                            <div class="stamp-circle"></div>
-                            <div class="stamp-text">R</div>
-                        </div>
+                        <div style="height: 90px;"></div>
                     <?php endif; ?>
 
-                    <div class="name"><?= html_escape($ttd->nama_pejabat ?? 'FRASETYO ANGGA SAPUTRA, S.E., M.Ak.'); ?></div>
-                    <div class="nip"><?= !empty($ttd->nomor_induk) ? 'NUPTK. ' . html_escape($ttd->nomor_induk) : 'NUPTK. 0960774765430262'; ?></div>
+                    <?php if (!empty($ttd) && !empty($ttd->cap_data_uri)): ?>
+                        <img class="cap-image" src="<?= $ttd->cap_data_uri; ?>" alt="Cap">
+                    <?php endif; ?>
+
+                    <div class="name"><?= html_escape($ttd->nama_pejabat ?? '-'); ?></div>
+                    <div class="nip"><?= !empty($ttd->nomor_induk) ? 'NUPTK. ' . html_escape($ttd->nomor_induk) : '-'; ?></div>
                 </div>
             </div>
             <div style="clear: both;"></div>

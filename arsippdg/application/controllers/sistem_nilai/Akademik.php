@@ -175,6 +175,10 @@ class Akademik extends SistemNilai_Controller
         $grades = $this->grade_model->get_all(NULL, NULL, 0);
         $pejabat = $this->pejabat_ttd_model->get_active();
         $ttd = !empty($pejabat) ? $pejabat[0] : NULL;
+        if ($ttd) {
+            $ttd->ttd_data_uri = $this->image_data_uri($ttd->ttd_path ?? '');
+            $ttd->cap_data_uri = $this->image_data_uri($ttd->cap_path ?? '');
+        }
 
         $html = $this->load->view('sistem_nilai/akademik/pdf_khs', [
             'mahasiswa' => $mahasiswa,
@@ -209,6 +213,20 @@ class Akademik extends SistemNilai_Controller
         }
 
         return '1';
+    }
+
+    /** Convert a locally uploaded signature image into a format Dompdf can render reliably. */
+    private function image_data_uri($relative_path)
+    {
+        $relative_path = ltrim((string) $relative_path, '/');
+        $path = FCPATH . 'assets/' . $relative_path;
+
+        if ($relative_path === '' || !is_file($path) || !is_readable($path)) {
+            return NULL;
+        }
+
+        $mime_type = function_exists('mime_content_type') ? mime_content_type($path) : 'image/png';
+        return 'data:' . $mime_type . ';base64,' . base64_encode(file_get_contents($path));
     }
 
     public function ips() { $this->render_empty_page('Indeks Prestasi Semester (IPS)', 'Akademik', 'bi-graph-up-arrow'); }

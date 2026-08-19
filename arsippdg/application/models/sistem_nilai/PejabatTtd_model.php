@@ -75,7 +75,7 @@ class PejabatTtd_model extends CI_Model
             return FALSE;
         }
 
-        $new_status = $current->status === 1 ? 0 : 1;
+        $new_status = (int) $current->status === 1 ? 0 : 1;
         return $this->db->where('id', (int) $id)->update($this->table, ['status' => $new_status]);
     }
 }

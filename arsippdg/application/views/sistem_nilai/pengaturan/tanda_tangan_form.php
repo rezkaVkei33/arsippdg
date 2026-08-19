@@ -78,8 +78,8 @@
                         <div class="mb-3">
                             <label for="status" class="form-label">Status <span class="text-danger">*</span></label>
                             <select id="status" name="status" class="form-select <?= form_error('status') ? 'is-invalid' : ''; ?>">
-                                <option value="1" <?= $status === 1 ? 'selected' : ''; ?>>Aktif</option>
-                                <option value="0" <?= $status === 0 ? 'selected' : ''; ?>>Nonaktif</option>
+                                <option value="1" <?= (int) $status === 1 ? 'selected' : ''; ?>>Aktif</option>
+                                <option value="0" <?= (int) $status === 0 ? 'selected' : ''; ?>>Nonaktif</option>
                             </select>
                             <small class="text-muted">Status aktif berarti tanda tangan akan digunakan pada dokumen PDF.</small>
                             <?php if (form_error('status')): ?>

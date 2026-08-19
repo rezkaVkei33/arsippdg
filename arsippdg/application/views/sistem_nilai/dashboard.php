@@ -7,7 +7,7 @@
     </div>
 
     <div class="row g-3 mb-4">
-        <div class="col-sm-6 col-xl-4">
+        <div class="col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body d-flex align-items-center gap-3">
                     <div class="rounded-circle bg-success-subtle text-success p-3"><i class="bi bi-people fs-3"></i></div>
@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-4">
+        <div class="col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body d-flex align-items-center gap-3">
                     <div class="rounded-circle bg-primary-subtle text-primary p-3"><i class="bi bi-diagram-3 fs-3"></i></div>
@@ -23,11 +23,19 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xl-4">
+        <div class="col-sm-6 col-xl-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body d-flex align-items-center gap-3">
                     <div class="rounded-circle bg-warning-subtle text-warning-emphasis p-3"><i class="bi bi-book fs-3"></i></div>
                     <div><div class="text-muted small">Total Mata Kuliah</div><div class="h2 mb-0"><?= number_format($summary->total_mata_kuliah, 0, ',', '.'); ?></div></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-danger-subtle text-danger p-3"><i class="bi bi-clipboard-x fs-3"></i></div>
+                    <div><div class="text-muted small">Mahasiswa Belum Dinilai</div><div class="h2 mb-0"><?= number_format($summary->mahasiswa_belum_dinilai, 0, ',', '.'); ?></div><div class="small text-muted">Tahun akademik aktif</div></div>
                 </div>
             </div>
         </div>
