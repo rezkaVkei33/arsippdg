@@ -31,7 +31,7 @@ class Akademik_model extends CI_Model
         return $this->db->where('id', (int) $id)->where('status', 'Aktif')->get('ak_tahun_akademik')->row();
     }
 
-    public function get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL, $program_studi_id = NULL, $limit = NULL, $offset = 0)
+    public function get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL, $program_studi_id = NULL, $limit = NULL, $offset = 0, $keyword = NULL)
     {
         $this->db
             ->distinct()
@@ -53,6 +53,8 @@ class Akademik_model extends CI_Model
             $this->db->where('m.program_studi_id', (int) $program_studi_id);
         }
 
+        $this->apply_mahasiswa_search($keyword);
+
         if ($limit !== NULL) {
             $this->db->limit((int) $limit, (int) $offset);
         }
@@ -60,7 +62,7 @@ class Akademik_model extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function count_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL, $program_studi_id = NULL)
+    public function count_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester = NULL, $program_studi_id = NULL, $keyword = NULL)
     {
         $this->db
             ->select('COUNT(DISTINCT m.id) AS total')
@@ -79,6 +81,8 @@ class Akademik_model extends CI_Model
         if ($program_studi_id !== NULL && $program_studi_id !== '' && $program_studi_id !== '0') {
             $this->db->where('m.program_studi_id', (int) $program_studi_id);
         }
+
+        $this->apply_mahasiswa_search($keyword);
 
         $row = $this->db->get()->row();
         return (int) ($row->total ?? 0);
@@ -142,5 +146,18 @@ class Akademik_model extends CI_Model
             ->where('pm.tahun_akademik_id', (int) $tahun_akademik_id)
             ->where('ta.status', 'Aktif')
             ->get()->row();
+    }
+
+    /** Search KHS students by NIM or name without considering their current status. */
+    private function apply_mahasiswa_search($keyword)
+    {
+        if ($keyword === NULL || $keyword === '') {
+            return;
+        }
+
+        $this->db->group_start()
+            ->like('m.nim', $keyword)
+            ->or_like('m.nama', $keyword)
+        ->group_end();
     }
 }

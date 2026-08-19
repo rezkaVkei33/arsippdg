@@ -26,6 +26,7 @@ $route['sistem-nilai/master-data/program-studi/simpan']     = 'sistem_nilai/Mast
 $route['sistem-nilai/master-data/program-studi/ubah/(:num)'] = 'sistem_nilai/MasterData/program_studi_edit/$1';
 $route['sistem-nilai/master-data/program-studi/perbarui/(:num)'] = 'sistem_nilai/MasterData/program_studi_update/$1';
 $route['sistem-nilai/master-data/program-studi/hapus/(:num)'] = 'sistem_nilai/MasterData/program_studi_delete/$1';
+$route['sistem-nilai/master-data/program-studi/toggle-status/(:num)'] = 'sistem_nilai/MasterData/program_studi_toggle_status/$1';
 $route['sistem-nilai/master-data/mahasiswa']                = 'sistem_nilai/Mahasiswa/index';
 $route['sistem-nilai/master-data/mahasiswa/tambah']         = 'sistem_nilai/Mahasiswa/create';
 $route['sistem-nilai/master-data/mahasiswa/simpan']         = 'sistem_nilai/Mahasiswa/store';

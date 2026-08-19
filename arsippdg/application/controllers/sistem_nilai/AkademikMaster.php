@@ -61,7 +61,7 @@ class AkademikMaster extends SistemNilai_Controller
             'keyword' => $q,
             'selected_prodi' => $selected_prodi,
             'selected_semester' => $selected_semester,
-            'program_studi_options' => $this->program_studi_model->get_all(),
+            'program_studi_options' => $this->program_studi_model->get_active(),
             'semester_options' => $this->master_model->mata_kuliah_semester_options(),
             'pagination' => $this->pagination,
             'total_rows' => $total_rows,

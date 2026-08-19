@@ -99,8 +99,10 @@ class Penilaian_model extends CI_Model
         return $this->db
             ->select('ak_mahasiswa.id, ak_mahasiswa.nim, ak_mahasiswa.nama, ak_mahasiswa.angkatan, ak_program_studi.nama_prodi')
             ->from('ak_mahasiswa')
-            ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'left')
+            ->join('ak_program_studi', 'ak_program_studi.id = ak_mahasiswa.program_studi_id', 'inner')
             ->where('ak_mahasiswa.program_studi_id', (int) $program_studi_id)
+            ->where('ak_mahasiswa.status', 'Aktif')
+            ->where('ak_program_studi.status', 'Aktif')
             ->where('ak_mahasiswa.angkatan', (string) $angkatan)
             ->order_by('ak_mahasiswa.nama', 'ASC')
             ->get()
@@ -126,7 +128,9 @@ class Penilaian_model extends CI_Model
         }
 
         if ($program_studi_id > 0 && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
+            $this->db->join('ak_program_studi', 'ak_program_studi.id = ak_mata_kuliah.program_studi_id', 'inner');
             $this->db->where('ak_mata_kuliah.program_studi_id', (int) $program_studi_id);
+            $this->db->where('ak_program_studi.status', 'Aktif');
         }
 
         return $this->db->order_by('ak_penawaran_mk.id', 'DESC')->get()->row();
@@ -199,5 +203,6 @@ class Penilaian_model extends CI_Model
         }
 
         $this->db->where('ak_tahun_akademik.status', 'Aktif');
+        $this->db->where('ak_program_studi.status', 'Aktif');
     }
 }

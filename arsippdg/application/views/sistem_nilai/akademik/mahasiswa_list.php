@@ -13,6 +13,9 @@
                 <input type="hidden" name="tahun_id" value="<?= (int) ($tahun_akademik->id ?? 0); ?>">
                 <input type="hidden" name="semester" value="<?= html_escape((string) ($semester ?? '')); ?>">
                 <div class="col-md-5">
+                    <input type="search" name="q" class="form-control" value="<?= html_escape($keyword); ?>" placeholder="Cari NIM atau nama mahasiswa">
+                </div>
+                <div class="col-md-4">
                     <select name="prodi" class="form-select">
                         <option value="">Semua Program Studi</option>
                         <?php foreach ($program_studi_options as $item): ?>
@@ -23,7 +26,7 @@
                 <div class="col-auto">
                     <button type="submit" class="btn btn-outline-success"><i class="bi bi-search"></i> Filter</button>
                 </div>
-                <?php if ($selected_prodi !== ''): ?>
+                <?php if ($selected_prodi !== '' || $keyword !== ''): ?>
                     <div class="col-auto">
                         <a href="<?= site_url('sistem-nilai/akademik/riwayat-mahasiswa?tahun_id=' . (int) ($tahun_akademik->id ?? 0) . '&semester=' . urlencode((string) ($semester ?? ''))); ?>" class="btn btn-outline-secondary">Reset</a>
                     </div>

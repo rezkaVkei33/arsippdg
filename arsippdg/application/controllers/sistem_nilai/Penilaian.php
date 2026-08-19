@@ -26,7 +26,7 @@ class Penilaian extends SistemNilai_Controller
         $this->render('penilaian/upload', [
             'title' => 'Upload Nilai - Sistem Nilai',
             'page_title' => 'Upload Nilai',
-            'program_studi_options' => $this->program_studi_model->get_all(),
+            'program_studi_options' => $this->program_studi_model->get_active(),
             'tahun_akademik_options' => $this->master_model->tahun_akademik(),
             'mata_kuliah_options' => $this->master_model->mata_kuliah(),
             'semester_options' => ['1' => 'Semester 1', '2' => 'Semester 2'],
@@ -197,7 +197,7 @@ class Penilaian extends SistemNilai_Controller
             'selected_mata_kuliah' => $mata_kuliah_id,
             'selected_prodi' => $program_studi_id,
             'mata_kuliah_options' => $this->master_model->mata_kuliah(),
-            'program_studi_options' => $this->program_studi_model->get_all(),
+            'program_studi_options' => $this->program_studi_model->get_active(),
             'pagination' => $this->pagination,
             'total_rows' => $total_rows,
             'current_page' => $page,

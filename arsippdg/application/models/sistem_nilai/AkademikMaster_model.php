@@ -23,7 +23,7 @@ class AkademikMaster_model extends CI_Model
             return $this->db->order_by('ak_tahun_akademik.tahun', 'DESC')->order_by('ak_mata_kuliah.nama_mk', 'ASC')->get()->result();
         }
 
-        return $this->db->order_by('id', 'DESC')->get()->result();
+        return $this->db->order_by($this->table($type) . '.id', 'DESC')->get()->result();
     }
 
     public function count_all($type, $keyword = '', $filter_value = NULL)
@@ -46,6 +46,12 @@ class AkademikMaster_model extends CI_Model
 
             $this->db->where('ak_tahun_akademik.status', 'Aktif');
 
+            if ($this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
+                $this->db
+                    ->join('ak_program_studi', 'ak_program_studi.id = ak_mata_kuliah.program_studi_id', 'inner')
+                    ->where('ak_program_studi.status', 'Aktif');
+            }
+
             if ($filter_value !== NULL && $filter_value !== '' && $filter_value !== 'all' && $this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
                 $this->db->where('ak_mata_kuliah.program_studi_id', (int) $filter_value);
             }
@@ -55,6 +61,12 @@ class AkademikMaster_model extends CI_Model
         $this->db->from($this->table($type));
 
         if ($type === 'mata-kuliah') {
+            if ($this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) {
+                $this->db
+                    ->join('ak_program_studi', 'ak_program_studi.id = ak_mata_kuliah.program_studi_id', 'inner')
+                    ->where('ak_program_studi.status', 'Aktif');
+            }
+
             if ($keyword !== '') {
                 $this->db->group_start()->like('kode_mk', $keyword)->or_like('nama_mk', $keyword)->group_end();
             }
@@ -74,7 +86,7 @@ class AkademikMaster_model extends CI_Model
     public function save($type, array $data, $id = NULL) { return $id === NULL ? $this->db->insert($this->table($type), $data) : $this->db->where('id', (int) $id)->update($this->table($type), $data); }
     public function delete($type, $id) { return $this->db->where('id', (int) $id)->delete($this->table($type)); }
     public function exists($type, array $where, $except = NULL) { $this->db->where($where); if ($except) $this->db->where('id !=', (int) $except); return $this->db->count_all_results($this->table($type)) > 0; }
-    public function mata_kuliah() { return $this->db->where('status', 'Aktif')->order_by('semester', 'ASC')->order_by('kode_mk', 'ASC')->get('ak_mata_kuliah')->result(); }
+    public function mata_kuliah() { $this->db->select('ak_mata_kuliah.*')->from('ak_mata_kuliah')->where('ak_mata_kuliah.status', 'Aktif'); if ($this->db->field_exists('program_studi_id', 'ak_mata_kuliah')) { $this->db->join('ak_program_studi', 'ak_program_studi.id = ak_mata_kuliah.program_studi_id', 'inner')->where('ak_program_studi.status', 'Aktif'); } return $this->db->order_by('ak_mata_kuliah.semester', 'ASC')->order_by('ak_mata_kuliah.kode_mk', 'ASC')->get()->result(); }
     public function mata_kuliah_semester_options() { return $this->db->select('semester')->from('ak_mata_kuliah')->where('semester IS NOT NULL')->group_by('semester')->order_by('semester', 'ASC')->get()->result(); }
     public function tahun_akademik() { return $this->db->where('status', 'Aktif')->order_by('tahun', 'DESC')->get('ak_tahun_akademik')->result(); }
 }

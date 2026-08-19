@@ -38,6 +38,7 @@ class Akademik extends SistemNilai_Controller
         $tahun_akademik_id = (int) $this->input->get('tahun_id', TRUE);
         $semester = $this->input->get('semester', TRUE);
         $selected_prodi = trim((string) $this->input->get('prodi', TRUE));
+        $keyword = trim((string) $this->input->get('q', TRUE));
         $page = max(1, (int) $this->input->get('page', TRUE));
         $per_page = 10;
 
@@ -46,7 +47,7 @@ class Akademik extends SistemNilai_Controller
         }
 
         $tahun = $this->akademik_model->get_tahun_akademik_by_id($tahun_akademik_id);
-        $total_rows = $this->akademik_model->count_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester, $selected_prodi);
+        $total_rows = $this->akademik_model->count_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester, $selected_prodi, $keyword);
 
         $config = [
             'base_url' => site_url('sistem-nilai/akademik/riwayat-mahasiswa') . '?tahun_id=' . (int) $tahun_akademik_id . '&semester=' . urlencode((string) $semester),
@@ -78,7 +79,7 @@ class Akademik extends SistemNilai_Controller
         $this->pagination->initialize($config);
 
         $offset = ($page - 1) * $per_page;
-        $mahasiswa = $this->akademik_model->get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester, $selected_prodi, $per_page, $offset);
+        $mahasiswa = $this->akademik_model->get_mahasiswa_by_tahun_semester($tahun_akademik_id, $semester, $selected_prodi, $per_page, $offset, $keyword);
 
         $this->render('akademik/mahasiswa_list', [
             'title' => 'Daftar Mahasiswa - KHS',
@@ -86,6 +87,7 @@ class Akademik extends SistemNilai_Controller
             'tahun_akademik' => $tahun,
             'semester' => $semester,
             'selected_prodi' => $selected_prodi,
+            'keyword' => $keyword,
             'program_studi_options' => $this->program_studi_model->get_all(),
             'mahasiswa' => $mahasiswa,
             'pagination' => $this->pagination,

@@ -83,6 +83,17 @@ class MasterData extends SistemNilai_Controller
         redirect('sistem-nilai/master-data/program-studi');
     }
 
+    public function program_studi_toggle_status($id)
+    {
+        $this->require_post();
+        $program_studi = $this->get_program_studi_or_404($id);
+        $status = $program_studi->status === 'Aktif' ? 'Nonaktif' : 'Aktif';
+
+        $this->program_studi_model->update($id, ['status' => $status]);
+        $this->session->set_flashdata('success', 'Program studi berhasil ' . strtolower($status) . '.');
+        redirect('sistem-nilai/master-data/program-studi');
+    }
+
     public function tahun_akademik() { $this->render_empty_page('Tahun Akademik', 'Master Data', 'bi-calendar-range'); }
     public function mata_kuliah() { $this->render_empty_page('Mata Kuliah', 'Master Data', 'bi-book'); }
     public function penawaran_mata_kuliah() { $this->render_empty_page('Penawaran Mata Kuliah', 'Master Data', 'bi-journal-plus'); }
