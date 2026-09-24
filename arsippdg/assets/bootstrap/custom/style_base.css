@@ -285,6 +285,39 @@
             margin-bottom: 0;
         }
 
+        /* Tabel daftar surat memakai lebar layar desktop sepenuhnya. Isi sel
+           boleh membungkus agar tidak memunculkan scroll horizontal. */
+        @media (min-width: 992px) {
+            .archive-table .table {
+                width: 100%;
+                table-layout: fixed;
+            }
+
+            .archive-table th:nth-child(1),
+            .archive-table td:nth-child(1) {
+                width: 8%;
+            }
+
+            .archive-table th:nth-child(3),
+            .archive-table td:nth-child(3),
+            .archive-table th:nth-last-child(2),
+            .archive-table td:nth-last-child(2) {
+                width: 11%;
+            }
+
+            .archive-table th:last-child,
+            .archive-table td:last-child {
+                width: 11rem;
+                white-space: nowrap;
+            }
+
+            .archive-table th,
+            .archive-table td {
+                overflow-wrap: anywhere;
+                word-break: normal;
+            }
+        }
+
         .recent-table th {
             background-color: var(--primary-color);
             color: white;

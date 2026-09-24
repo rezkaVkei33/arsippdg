@@ -19,7 +19,8 @@ class Google extends CI_Controller {
         $this->client->setAccessType('offline');
         $this->client->setPrompt('select_account consent');
         $this->client->setScopes([
-            Drive::DRIVE
+            // Scope non-sensitive untuk file yang dibuat/dikelola aplikasi.
+            Drive::DRIVE_FILE
         ]);
         $this->client->setRedirectUri(
             base_url('google/callback')

@@ -2,7 +2,7 @@
 <?php $this->load->view('partials/navbar'); ?>
 
 <section class="dashboard-content">
-<div class="container">
+<div class="container-fluid px-4 px-xl-5">
 
     <div class="mb-4">
         <h2 class="section-title">
@@ -40,7 +40,7 @@
     </form>
 
     <!-- TABLE -->
-     <div class="recent-table">
+     <div class="recent-table archive-table">
          <div class="table-responsive">
              <table class="table table-hover align-middle">
                  <thead>
@@ -147,9 +147,10 @@
     <!-- PAGINATION -->
     <?php $pagination_links = $this->pagination->create_links(); ?>
     <?php if ($pagination_links !== ''): ?>
-        <nav>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 mt-3">
+            <small class="text-muted">Menampilkan <?= count($page_object); ?> dari <?= $total_rows; ?> data</small>
             <?= $pagination_links; ?>
-        </nav>
+        </div>
     <?php endif; ?>
 
 </div>

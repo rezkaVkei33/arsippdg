@@ -23,7 +23,9 @@ class Google_drive_oauth {
 
         $this->client = new Client();
         $this->client->setAuthConfig(APPPATH . 'client_secret.json');
-        $this->client->setScopes([Drive::DRIVE]);
+        // Aplikasi hanya mengelola berkas yang dibuatnya sendiri. Jangan
+        // meminta akses penuh ke seluruh Google Drive pengguna.
+        $this->client->setScopes([Drive::DRIVE_FILE]);
         $this->client->setAccessType('offline');
 
         $accessToken = json_decode(file_get_contents($this->tokenPath), true);

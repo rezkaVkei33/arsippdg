@@ -16,28 +16,61 @@ class SuratMasuk extends CI_Controller {
     {
         $keyword = $this->input->get('q');
         $bulan = $this->input->get('bulan');
+        $page = max(1, (int) $this->input->get('page'));
 
-        $config['base_url'] = site_url('suratmasuk');
-        $config['per_page'] = 10;
-        $config['total_rows'] = $this->surat->count_aktif($keyword, $bulan);
-
-        $this->pagination->initialize($config);
+        $per_page = 10;
+        $total_rows = $this->surat->count_aktif($keyword, $bulan);
+        $this->initialize_pagination(site_url('suratmasuk'), $total_rows, $per_page);
 
         $data = [
             'title'       => 'Arsip PDG - Surat Masuk',
             'subtitle'    => 'Surat Masuk',
             'content'     => 'surat_masuk/index',
             'page_object' => $this->surat->get_aktif(
-                                $config['per_page'],
-                                $this->uri->segment(3),
+                                $per_page,
+                                ($page - 1) * $per_page,
                                 $keyword,
                                 $bulan
                             ),
             'keyword' => $keyword,
-            'bulan'=> $bulan
+            'bulan'=> $bulan,
+            'total_rows' => $total_rows,
+            'current_page' => $page,
+            'per_page' => $per_page
         ];
 
         $this->load->view('surat_masuk/surat_masuk', $data);
+    }
+
+    private function initialize_pagination($base_url, $total_rows, $per_page)
+    {
+        $this->pagination->initialize([
+            'base_url' => $base_url,
+            'total_rows' => (int) $total_rows,
+            'per_page' => (int) $per_page,
+            'use_page_numbers' => TRUE,
+            'page_query_string' => TRUE,
+            'query_string_segment' => 'page',
+            'reuse_query_string' => TRUE,
+            'full_tag_open' => '<nav aria-label="Pagination"><ul class="pagination pagination-sm justify-content-center mb-0">',
+            'full_tag_close' => '</ul></nav>',
+            'first_link' => 'Awal',
+            'last_link' => 'Akhir',
+            'next_link' => '›',
+            'prev_link' => '‹',
+            'num_tag_open' => '<li class="page-item"><span class="page-link">',
+            'num_tag_close' => '</span></li>',
+            'cur_tag_open' => '<li class="page-item active"><span class="page-link">',
+            'cur_tag_close' => '</span></li>',
+            'next_tag_open' => '<li class="page-item"><span class="page-link">',
+            'next_tag_close' => '</span></li>',
+            'prev_tag_open' => '<li class="page-item"><span class="page-link">',
+            'prev_tag_close' => '</span></li>',
+            'first_tag_open' => '<li class="page-item"><span class="page-link">',
+            'first_tag_close' => '</span></li>',
+            'last_tag_open' => '<li class="page-item"><span class="page-link">',
+            'last_tag_close' => '</span></li>'
+        ]);
     }
 
     public function add()

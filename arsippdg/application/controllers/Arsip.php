@@ -15,9 +15,9 @@ class Arsip extends CI_Controller {
     {
         $keyword = $this->input->get('q');
         $bulan = $this->input->get('bulan');
+        $page = max(1, (int) $this->input->get('page'));
 
-        $config['base_url'] = site_url('arsip/masuk');
-        $config['per_page'] = 10;
+        $per_page = 10;
         
         // Custom query untuk arsip masuk
         $this->db->where('jenis_surat', 'masuk');
@@ -34,9 +34,8 @@ class Arsip extends CI_Controller {
             $this->db->where("DATE_FORMAT(tanggal_diarsipkan, '%Y-%m') = " . $this->db->escape($bulan));
         }
 
-        $config['total_rows'] = $this->db->count_all_results('arsip');
-
-        $this->pagination->initialize($config);
+        $total_rows = $this->db->count_all_results('arsip');
+        $this->initialize_pagination(site_url('arsip/masuk'), $total_rows, $per_page);
 
         // Reset query dan ambil data
         $this->db->where('jenis_surat', 'masuk');
@@ -55,7 +54,7 @@ class Arsip extends CI_Controller {
 
         $page_object = $this->db
             ->order_by('tanggal_diarsipkan', 'DESC')
-            ->get('arsip', $config['per_page'], $this->uri->segment(3))
+            ->get('arsip', $per_page, ($page - 1) * $per_page)
             ->result();
 
         $data = [
@@ -64,7 +63,10 @@ class Arsip extends CI_Controller {
             'jenis'       => 'masuk',
             'page_object' => $page_object,
             'keyword'     => $keyword,
-            'bulan'     => $bulan
+            'bulan'     => $bulan,
+            'total_rows' => $total_rows,
+            'current_page' => $page,
+            'per_page' => $per_page
         ];
 
         $this->load->view('arsip/arsip_masuk', $data);
@@ -75,9 +77,9 @@ class Arsip extends CI_Controller {
     {
         $keyword = $this->input->get('q');
         $bulan = $this->input->get('bulan');
+        $page = max(1, (int) $this->input->get('page'));
 
-        $config['base_url'] = site_url('arsip/keluar');
-        $config['per_page'] = 10;
+        $per_page = 10;
         
         // Custom query untuk arsip keluar
         $this->db->where('jenis_surat', 'keluar');
@@ -94,9 +96,8 @@ class Arsip extends CI_Controller {
             $this->db->where("DATE_FORMAT(tanggal_diarsipkan, '%Y-%m') = " . $this->db->escape($bulan));
         }
 
-        $config['total_rows'] = $this->db->count_all_results('arsip');
-
-        $this->pagination->initialize($config);
+        $total_rows = $this->db->count_all_results('arsip');
+        $this->initialize_pagination(site_url('arsip/keluar'), $total_rows, $per_page);
 
         // Reset query dan ambil data
         $this->db->where('jenis_surat', 'keluar');
@@ -115,7 +116,7 @@ class Arsip extends CI_Controller {
 
         $page_object = $this->db
             ->order_by('tanggal_diarsipkan', 'DESC')
-            ->get('arsip', $config['per_page'], $this->uri->segment(3))
+            ->get('arsip', $per_page, ($page - 1) * $per_page)
             ->result();
 
         $data = [
@@ -124,10 +125,44 @@ class Arsip extends CI_Controller {
             'jenis'       => 'keluar',
             'page_object' => $page_object,
             'keyword'     => $keyword,
-            'bulan'     => $bulan
+            'bulan'     => $bulan,
+            'total_rows' => $total_rows,
+            'current_page' => $page,
+            'per_page' => $per_page
         ];
 
         $this->load->view('arsip/arsip_keluar', $data);
+    }
+
+    private function initialize_pagination($base_url, $total_rows, $per_page)
+    {
+        $this->pagination->initialize([
+            'base_url' => $base_url,
+            'total_rows' => (int) $total_rows,
+            'per_page' => (int) $per_page,
+            'use_page_numbers' => TRUE,
+            'page_query_string' => TRUE,
+            'query_string_segment' => 'page',
+            'reuse_query_string' => TRUE,
+            'full_tag_open' => '<nav aria-label="Pagination"><ul class="pagination pagination-sm justify-content-center mb-0">',
+            'full_tag_close' => '</ul></nav>',
+            'first_link' => 'Awal',
+            'last_link' => 'Akhir',
+            'next_link' => '›',
+            'prev_link' => '‹',
+            'num_tag_open' => '<li class="page-item"><span class="page-link">',
+            'num_tag_close' => '</span></li>',
+            'cur_tag_open' => '<li class="page-item active"><span class="page-link">',
+            'cur_tag_close' => '</span></li>',
+            'next_tag_open' => '<li class="page-item"><span class="page-link">',
+            'next_tag_close' => '</span></li>',
+            'prev_tag_open' => '<li class="page-item"><span class="page-link">',
+            'prev_tag_close' => '</span></li>',
+            'first_tag_open' => '<li class="page-item"><span class="page-link">',
+            'first_tag_close' => '</span></li>',
+            'last_tag_open' => '<li class="page-item"><span class="page-link">',
+            'last_tag_close' => '</span></li>'
+        ]);
     }
 
     // Detail arsip
