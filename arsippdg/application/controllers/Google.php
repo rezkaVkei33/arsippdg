@@ -45,7 +45,17 @@ class Google extends CI_Controller {
 
         $tokenPath = APPPATH . 'drive_token.json';
 
-        $result = file_put_contents($tokenPath, json_encode($token));
+        // Google dapat tidak mengembalikan refresh_token pada otorisasi ulang.
+        // Jangan hapus refresh token yang masih valid, karena token inilah yang
+        // memungkinkan upload, update, dan delete berjalan tanpa login lagi.
+        if (empty($token['refresh_token']) && file_exists($tokenPath)) {
+            $previousToken = json_decode(file_get_contents($tokenPath), true);
+            if (is_array($previousToken) && !empty($previousToken['refresh_token'])) {
+                $token['refresh_token'] = $previousToken['refresh_token'];
+            }
+        }
+
+        $result = file_put_contents($tokenPath, json_encode($token), LOCK_EX);
 
         if ($result === false) {
             show_error('Gagal menulis drive_token.json. Periksa permission folder application/');

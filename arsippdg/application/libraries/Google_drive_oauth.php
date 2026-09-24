@@ -26,28 +26,49 @@ class Google_drive_oauth {
         $this->client->setScopes([Drive::DRIVE]);
         $this->client->setAccessType('offline');
 
-        $accessToken = json_decode(
-            file_get_contents($this->tokenPath),
-            true
-        );
+        $accessToken = json_decode(file_get_contents($this->tokenPath), true);
+
+        if (!is_array($accessToken) || empty($accessToken['access_token'])) {
+            throw new Exception('Google Drive token tidak valid. Silakan hubungkan akun Google sekali lagi.');
+        }
 
         $this->client->setAccessToken($accessToken);
 
         if ($this->client->isAccessTokenExpired()) {
-            if ($this->client->getRefreshToken()) {
-                $this->client->fetchAccessTokenWithRefreshToken(
-                    $this->client->getRefreshToken()
-                );
-                file_put_contents(
-                    $this->tokenPath,
-                    json_encode($this->client->getAccessToken())
-                );
-            } else {
+            $refreshToken = $this->client->getRefreshToken();
+
+            if (empty($refreshToken)) {
                 throw new Exception('Google token expired. Please login again.');
             }
+
+            $newToken = $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
+
+            if (isset($newToken['error'])) {
+                log_message('error', 'Google Drive token refresh gagal: ' . ($newToken['error_description'] ?? $newToken['error']));
+                throw new Exception('Sesi Google Drive tidak dapat diperbarui. Silakan hubungkan akun Google kembali.');
+            }
+
+            // Provider OAuth tidak selalu mengirim refresh_token pada respons refresh.
+            // Simpan token lama agar refresh berikutnya tetap dapat dilakukan otomatis.
+            $newToken = $this->client->getAccessToken();
+            $newToken['refresh_token'] = $refreshToken;
+            $this->saveToken($newToken);
         }
 
         $this->service = new Drive($this->client);
+    }
+
+    /**
+     * Menyimpan token hasil refresh. LOCK_EX mencegah token rusak saat dua
+     * request upload/delete berjalan dalam waktu yang bersamaan.
+     */
+    private function saveToken($token)
+    {
+        $json = json_encode($token);
+
+        if ($json === false || file_put_contents($this->tokenPath, $json, LOCK_EX) === false) {
+            throw new Exception('Gagal menyimpan token Google Drive. Periksa izin tulis file application/drive_token.json.');
+        }
     }
 
     public function upload($filePath, $fileName, $parentId)
