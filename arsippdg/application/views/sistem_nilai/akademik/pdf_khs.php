@@ -25,7 +25,6 @@
         }
 
         .kop-wrapper {
-            border-bottom: 2px solid #111;
             padding: 4px 0 8px 0;
             background: #fff;
         }
@@ -33,7 +32,7 @@
         .uploaded-kop-image {
             display: block;
             width: 100%;
-            max-height: 125px;
+            max-height: 140px;
             object-fit: contain;
         }
 
