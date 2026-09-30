@@ -225,8 +225,18 @@ class Akademik extends SistemNilai_Controller
             return NULL;
         }
 
-        $mime_type = function_exists('mime_content_type') ? mime_content_type($path) : 'image/png';
-        return 'data:' . $mime_type . ';base64,' . base64_encode(file_get_contents($path));
+        $mime_type = function_exists('mime_content_type') ? mime_content_type($path) : FALSE;
+        $allowed_mime_types = ['image/jpeg', 'image/png', 'image/gif'];
+        if (!in_array($mime_type, $allowed_mime_types, TRUE)) {
+            return NULL;
+        }
+
+        $image_contents = file_get_contents($path);
+        if ($image_contents === FALSE || $image_contents === '') {
+            return NULL;
+        }
+
+        return 'data:' . $mime_type . ';base64,' . base64_encode($image_contents);
     }
 
     public function ips() { $this->render_empty_page('Indeks Prestasi Semester (IPS)', 'Akademik', 'bi-graph-up-arrow'); }

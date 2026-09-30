@@ -8,6 +8,7 @@ class Pengaturan extends SistemNilai_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->load->helper('string');
         $this->load->model('sistem_nilai/PejabatTtd_model', 'pejabat_ttd_model');
         $this->load->model('sistem_nilai/Grade_model', 'grade_model');
         $this->load->library(['form_validation', 'pagination', 'upload']);
@@ -256,18 +257,32 @@ class Pengaturan extends SistemNilai_Controller
 
         $ttd_upload = $this->handle_file_upload('ttd_file', 'ttd');
         if ($ttd_upload === FALSE) {
-            $this->session->set_flashdata('error', 'Gagal upload file tanda tangan');
+            $this->session->set_flashdata('error', $this->upload->display_errors('', '') ?: 'Gagal upload file tanda tangan');
             redirect('sistem-nilai/pengaturan/tanda-tangan/tambah');
             return;
         }
         $data['ttd_path'] = $ttd_upload;
 
         $cap_upload = $this->handle_file_upload('cap_file', 'cap');
-        if ($cap_upload !== FALSE && $cap_upload !== '') {
+        if ($cap_upload === FALSE) {
+            @unlink(FCPATH . 'assets/' . $ttd_upload);
+            $this->session->set_flashdata('error', $this->upload->display_errors('', '') ?: 'Gagal upload file cap');
+            redirect('sistem-nilai/pengaturan/tanda-tangan/tambah');
+            return;
+        }
+        if ($cap_upload !== '') {
             $data['cap_path'] = $cap_upload;
         }
 
-        $this->pejabat_ttd_model->insert($data);
+        if (!$this->pejabat_ttd_model->insert($data)) {
+            @unlink(FCPATH . 'assets/' . $ttd_upload);
+            if (!empty($data['cap_path'])) {
+                @unlink(FCPATH . 'assets/' . $data['cap_path']);
+            }
+            $this->session->set_flashdata('error', 'Data tanda tangan gagal disimpan. Silakan coba kembali.');
+            redirect('sistem-nilai/pengaturan/tanda-tangan/tambah');
+            return;
+        }
         $this->session->set_flashdata('success', 'Data tanda tangan berhasil ditambahkan');
         redirect('sistem-nilai/pengaturan/tanda-tangan');
     }
@@ -305,24 +320,45 @@ class Pengaturan extends SistemNilai_Controller
 
         $ttd_upload = $this->handle_file_upload('ttd_file', 'ttd');
         if ($ttd_upload === FALSE && !empty($_FILES['ttd_file']['name'])) {
-            $this->session->set_flashdata('error', 'Gagal upload file tanda tangan');
+            $this->session->set_flashdata('error', $this->upload->display_errors('', '') ?: 'Gagal upload file tanda tangan');
             redirect('sistem-nilai/pengaturan/tanda-tangan/ubah/' . $id);
             return;
         }
-        if ($ttd_upload !== FALSE && $ttd_upload !== '') {
-            @unlink(FCPATH . 'assets/' . $pejabat->ttd_path);
-            $data['ttd_path'] = $ttd_upload;
-        }
 
         $cap_upload = $this->handle_file_upload('cap_file', 'cap');
-        if ($cap_upload !== FALSE && $cap_upload !== '') {
-            if (!empty($pejabat->cap_path)) {
-                @unlink(FCPATH . 'assets/' . $pejabat->cap_path);
+        if ($cap_upload === FALSE && !empty($_FILES['cap_file']['name'])) {
+            if ($ttd_upload !== FALSE && $ttd_upload !== '') {
+                @unlink(FCPATH . 'assets/' . $ttd_upload);
             }
+            $this->session->set_flashdata('error', $this->upload->display_errors('', '') ?: 'Gagal upload file cap');
+            redirect('sistem-nilai/pengaturan/tanda-tangan/ubah/' . $id);
+            return;
+        }
+
+        if ($ttd_upload !== FALSE && $ttd_upload !== '') {
+            $data['ttd_path'] = $ttd_upload;
+        }
+        if ($cap_upload !== FALSE && $cap_upload !== '') {
             $data['cap_path'] = $cap_upload;
         }
 
-        $this->pejabat_ttd_model->update($id, $data);
+        if (!$this->pejabat_ttd_model->update($id, $data)) {
+            if (isset($data['ttd_path'])) {
+                @unlink(FCPATH . 'assets/' . $data['ttd_path']);
+            }
+            if (isset($data['cap_path'])) {
+                @unlink(FCPATH . 'assets/' . $data['cap_path']);
+            }
+            $this->session->set_flashdata('error', 'Data tanda tangan gagal diperbarui. Silakan coba kembali.');
+            redirect('sistem-nilai/pengaturan/tanda-tangan/ubah/' . $id);
+            return;
+        }
+        if (isset($data['ttd_path']) && !empty($pejabat->ttd_path)) {
+            @unlink(FCPATH . 'assets/' . $pejabat->ttd_path);
+        }
+        if (isset($data['cap_path']) && !empty($pejabat->cap_path)) {
+            @unlink(FCPATH . 'assets/' . $pejabat->cap_path);
+        }
         $this->session->set_flashdata('success', 'Data tanda tangan berhasil diperbarui');
         redirect('sistem-nilai/pengaturan/tanda-tangan');
     }
@@ -395,14 +431,20 @@ class Pengaturan extends SistemNilai_Controller
             return '';
         }
 
+        $upload_path = FCPATH . 'assets/' . $folder . DIRECTORY_SEPARATOR;
+        if (!is_dir($upload_path) && !@mkdir($upload_path, 0755, TRUE) && !is_dir($upload_path)) {
+            $this->upload->set_error('Tidak dapat membuat folder penyimpanan gambar.');
+            return FALSE;
+        }
+
         $config = [
-            'upload_path' => FCPATH . 'assets/' . $folder,
+            'upload_path' => $upload_path,
             'allowed_types' => 'jpg|jpeg|png|gif',
             'max_size' => 5120,
-            'file_name' => 'ttd_' . time() . '_' . random_string('alnum', 8),
+            'file_name' => $folder . '_' . date('Ymd_His') . '_' . random_string('alnum', 12),
         ];
 
-        $this->upload->initialize($config);
+        $this->upload->initialize($config, TRUE);
 
         if (!$this->upload->do_upload($input_name)) {
             $this->form_validation->set_message('required', $this->upload->display_errors('', ''));
