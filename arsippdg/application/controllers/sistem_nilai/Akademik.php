@@ -12,6 +12,7 @@ class Akademik extends SistemNilai_Controller
         $this->load->model('sistem_nilai/ProgramStudi_model', 'program_studi_model');
         $this->load->model('sistem_nilai/Grade_model', 'grade_model');
         $this->load->model('sistem_nilai/PejabatTtd_model', 'pejabat_ttd_model');
+        $this->load->model('sistem_nilai/KopSurat_model', 'kop_surat_model');
         $this->load->library('pagination');
     }
 
@@ -179,6 +180,8 @@ class Akademik extends SistemNilai_Controller
             $ttd->ttd_data_uri = $this->image_data_uri($ttd->ttd_path ?? '');
             $ttd->cap_data_uri = $this->image_data_uri($ttd->cap_path ?? '');
         }
+        $kop_surat = $this->kop_surat_model->get_active();
+        $kop_surat_data_uri = $kop_surat ? $this->image_data_uri($kop_surat->gambar ?? '') : NULL;
 
         $html = $this->load->view('sistem_nilai/akademik/pdf_khs', [
             'mahasiswa' => $mahasiswa,
@@ -195,6 +198,8 @@ class Akademik extends SistemNilai_Controller
             'tanggal_update' => $tanggal_update,
             'grades' => $grades,
             'ttd' => $ttd,
+            'kop_surat' => $kop_surat,
+            'kop_surat_data_uri' => $kop_surat_data_uri,
         ], TRUE);
 
         $this->pdf_generator->generate($html, 'KHS_' . $mahasiswa->nim, true);

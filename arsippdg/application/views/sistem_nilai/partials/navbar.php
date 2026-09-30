@@ -51,6 +51,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="<?= site_url('sistem-nilai/pengaturan/grade'); ?>"><i class="bi bi-sliders"></i> Grade</a></li>
                         <li><a class="dropdown-item" href="<?= site_url('sistem-nilai/pengaturan/tanda-tangan'); ?>"><i class="bi bi-pen"></i> Tanda Tangan</a></li>
+                        <li><a class="dropdown-item" href="<?= site_url('sistem-nilai/pengaturan/kop-surat'); ?>"><i class="bi bi-image"></i> Kop Surat</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown ms-lg-2">

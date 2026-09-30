@@ -77,6 +77,10 @@ $route['sistem-nilai/pengaturan/tanda-tangan/ubah/(:num)']  = 'sistem_nilai/Peng
 $route['sistem-nilai/pengaturan/tanda-tangan/update/(:num)'] = 'sistem_nilai/Pengaturan/update_ttd/$1';
 $route['sistem-nilai/pengaturan/tanda-tangan/hapus/(:num)']  = 'sistem_nilai/Pengaturan/hapus_ttd/$1';
 $route['sistem-nilai/pengaturan/tanda-tangan/toggle-status/(:num)'] = 'sistem_nilai/Pengaturan/toggle_ttd_status/$1';
+$route['sistem-nilai/pengaturan/kop-surat']             = 'sistem_nilai/Pengaturan/kop_surat';
+$route['sistem-nilai/pengaturan/kop-surat/simpan']      = 'sistem_nilai/Pengaturan/simpan_kop_surat';
+$route['sistem-nilai/pengaturan/kop-surat/update/(:num)'] = 'sistem_nilai/Pengaturan/update_kop_surat/$1';
+$route['sistem-nilai/pengaturan/kop-surat/hapus/(:num)'] = 'sistem_nilai/Pengaturan/hapus_kop_surat/$1';
 
 // ========== USER MANAGEMENT ROUTES ==========
 $route['users']               = 'Users/index';

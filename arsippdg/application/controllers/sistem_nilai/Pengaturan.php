@@ -10,6 +10,7 @@ class Pengaturan extends SistemNilai_Controller
         parent::__construct();
         $this->load->helper('string');
         $this->load->model('sistem_nilai/PejabatTtd_model', 'pejabat_ttd_model');
+        $this->load->model('sistem_nilai/KopSurat_model', 'kop_surat_model');
         $this->load->model('sistem_nilai/Grade_model', 'grade_model');
         $this->load->library(['form_validation', 'pagination', 'upload']);
     }
@@ -231,6 +232,125 @@ class Pengaturan extends SistemNilai_Controller
             'current_page' => $page,
             'per_page' => $per_page
         ]);
+    }
+
+    /** Manage the single letterhead image used by KHS exports. */
+    public function kop_surat()
+    {
+        $this->render('pengaturan/kop_surat', [
+            'title' => 'Kop Surat - Pengaturan Sistem Nilai',
+            'page_title' => 'Kop Surat',
+            'kop_surat' => $this->kop_surat_model->get_single(),
+        ]);
+    }
+
+    public function simpan_kop_surat()
+    {
+        $this->require_post();
+        if ($this->kop_surat_model->get_single()) {
+            $this->session->set_flashdata('error', 'Kop surat sudah tersedia. Ubah data yang ada untuk mengganti gambarnya.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        $nama_kop = trim((string) $this->input->post('nama_kop', TRUE));
+        $nama_kop_length = function_exists('mb_strlen') ? mb_strlen($nama_kop, 'UTF-8') : strlen($nama_kop);
+        if ($nama_kop === '' || $nama_kop_length > 150) {
+            $this->session->set_flashdata('error', 'Nama kop surat wajib diisi dan maksimal 150 karakter.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        $gambar = $this->handle_file_upload('gambar', 'kop_surat');
+        if ($gambar === FALSE || $gambar === '') {
+            $error = $gambar === FALSE ? $this->upload->display_errors('', '') : 'Gambar kop surat wajib diunggah.';
+            $this->session->set_flashdata('error', $error ?: 'Gagal mengunggah gambar kop surat.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        $data = [
+            'nama_kop' => $nama_kop,
+            'gambar' => $gambar,
+            'status' => (int) $this->input->post('status', TRUE) === 1 ? 1 : 0,
+        ];
+        if (!$this->kop_surat_model->insert($data)) {
+            @unlink(FCPATH . 'assets/' . $gambar);
+            $this->session->set_flashdata('error', 'Data kop surat gagal disimpan. Silakan coba kembali.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        $this->session->set_flashdata('success', 'Kop surat berhasil disimpan.');
+        redirect('sistem-nilai/pengaturan/kop-surat');
+    }
+
+    public function update_kop_surat($id)
+    {
+        $this->require_post();
+        $kop_surat = $this->kop_surat_model->get_by_id($id);
+        if (!$kop_surat) {
+            show_404();
+        }
+
+        $nama_kop = trim((string) $this->input->post('nama_kop', TRUE));
+        $nama_kop_length = function_exists('mb_strlen') ? mb_strlen($nama_kop, 'UTF-8') : strlen($nama_kop);
+        if ($nama_kop === '' || $nama_kop_length > 150) {
+            $this->session->set_flashdata('error', 'Nama kop surat wajib diisi dan maksimal 150 karakter.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        $gambar_baru = $this->handle_file_upload('gambar', 'kop_surat');
+        if ($gambar_baru === FALSE) {
+            $this->session->set_flashdata('error', $this->upload->display_errors('', '') ?: 'Gagal mengunggah gambar kop surat.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        $data = [
+            'nama_kop' => $nama_kop,
+            'status' => (int) $this->input->post('status', TRUE) === 1 ? 1 : 0,
+        ];
+        if ($gambar_baru !== '') {
+            $data['gambar'] = $gambar_baru;
+        }
+
+        if (!$this->kop_surat_model->update($id, $data)) {
+            if ($gambar_baru !== '') {
+                @unlink(FCPATH . 'assets/' . $gambar_baru);
+            }
+            $this->session->set_flashdata('error', 'Data kop surat gagal diperbarui. Silakan coba kembali.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        if ($gambar_baru !== '' && !empty($kop_surat->gambar)) {
+            @unlink(FCPATH . 'assets/' . $kop_surat->gambar);
+        }
+        $this->session->set_flashdata('success', 'Kop surat berhasil diperbarui.');
+        redirect('sistem-nilai/pengaturan/kop-surat');
+    }
+
+    public function hapus_kop_surat($id)
+    {
+        $this->require_post();
+        $kop_surat = $this->kop_surat_model->get_by_id($id);
+        if (!$kop_surat) {
+            show_404();
+        }
+
+        if (!$this->kop_surat_model->delete($id)) {
+            $this->session->set_flashdata('error', 'Data kop surat gagal dihapus. Silakan coba kembali.');
+            redirect('sistem-nilai/pengaturan/kop-surat');
+            return;
+        }
+
+        if (!empty($kop_surat->gambar)) {
+            @unlink(FCPATH . 'assets/' . $kop_surat->gambar);
+        }
+        $this->session->set_flashdata('success', 'Kop surat dan file gambarnya berhasil dihapus.');
+        redirect('sistem-nilai/pengaturan/kop-surat');
     }
 
     public function tambah_ttd()

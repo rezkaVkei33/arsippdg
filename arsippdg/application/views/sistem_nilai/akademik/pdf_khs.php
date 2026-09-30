@@ -26,8 +26,15 @@
 
         .kop-wrapper {
             border-bottom: 2px solid #111;
-            padding: 6px 10px 8px 10px;
+            padding: 4px 0 8px 0;
             background: #fff;
+        }
+
+        .uploaded-kop-image {
+            display: block;
+            width: 100%;
+            max-height: 125px;
+            object-fit: contain;
         }
 
         .kop-header {
@@ -149,7 +156,7 @@
         }
 
         .summary-left {
-            width: 62%;
+            width: 56%;
             float: left;
         }
 
@@ -283,21 +290,25 @@
 <body>
     <div class="page">
         <div class="kop-wrapper">
-            <div class="kop-header">
-                <div class="logo-box">
-                    <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek">
-                </div>
-                <div class="instansi">
-                    <div class="brand">POLITEKNIK DARMA GANESHA</div>
-                    <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
-                    <div class="alamat">
-                        Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
-                        Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
-                        Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
-                        Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id
+            <?php if (!empty($kop_surat_data_uri)): ?>
+                <img class="uploaded-kop-image" src="<?= $kop_surat_data_uri; ?>" alt="<?= html_escape($kop_surat->nama_kop ?? 'Kop Surat'); ?>">
+            <?php else: ?>
+                <div class="kop-header">
+                    <div class="logo-box">
+                        <img src="<?= base_url('assets/img/LogoPoltek.png'); ?>" alt="Logo Poltek">
+                    </div>
+                    <div class="instansi">
+                        <div class="brand">POLITEKNIK DARMA GANESHA</div>
+                        <div class="subbrand">PERHOTELAN – SISTEM INFORMASI</div>
+                        <div class="alamat">
+                            Alamat : Kampus 1, Jl. M. Faqot No 9 Air Merbau Tanjung Pandan, Belitung<br>
+                            Kampus 2. Jl. Wisma Ria II, Halang, Manggar, Belitung Timur<br>
+                            Provinsi Kep. Bangka Belitung Telp : 0817-8211-9043<br>
+                            Website : www.poltekdg.ac.id &nbsp;&nbsp; Email : admin@poltekdg.ac.id
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
         </div>
 
         <div class="title-wrap">
@@ -372,7 +383,7 @@
 
         <div class="footer-area">
             <div class="summary-left">
-                <div class="ips-label">Index Prestasi Semester : <?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></div>
+                <div class="ips-label">Indeks Prestasi Semester : <?= html_escape(number_format((float) $ip, 2, ',', '.')); ?></div>
 
                 <table class="mini-table">
                     <tr>
